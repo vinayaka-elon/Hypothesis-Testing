@@ -1,0 +1,1056 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Hypothesis Testing Lab</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Commissioner:wght@300;400;500;600;700;800&display=swap">
+<style>
+/* Centred column, segmented control, soft tiles - the Python Activities layout.
+   Elon maroon and gold for the chrome; a validated three-colour set for the data. */
+:root{
+  --bg:#ffffff; --bg-2:#f6f4f1; --card:#ffffff; --fill:#f4f1ec; --fill-2:#ece7df;
+  --text:#191410; --text-2:#6b6257; --text-3:#8d8377;
+  --sep:#ded7cc; --sep-2:#ece7df;
+  --maroon:#73000a; --maroon-2:#8f1b23; --gold:#b59a57; --gold-2:#8a7230;
+  --curve:#0b8ea3; --sim:#9b2226; --samp:#9a7b25;
+  --good:#46742b; --good-bg:#eef3e8; --warn:#b7410e; --warn-bg:#fcf0e8; --bad:#8f1b23;
+  --grid:#ece7df;
+  --r:18px; --r-sm:12px;
+  --ui:"Commissioner",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --fs-1:40px; --fs-2:30px; --fs-3:23px; --fs-4:19px; --fs-5:16px;
+  --fs-6:14px; --fs-7:12px; --fs-8:10.5px; --fs-code:13.5px;
+  --shadow:0 4px 20px rgba(60,40,20,.05), 0 1px 3px rgba(60,40,20,.04);
+  --shadow-lg:0 18px 46px rgba(60,40,20,.10), 0 2px 8px rgba(60,40,20,.05);
+  --ease:cubic-bezier(.32,.72,0,1);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --bg:#121110; --bg-2:#191715; --card:#1f1d1a; --fill:#26231f; --fill-2:#312d27;
+  --text:#f3eee6; --text-2:#a79c8c; --text-3:#8d8275;
+  --sep:#36312a; --sep-2:#2a2621;
+  --maroon:#c75560; --maroon-2:#d9747e; --gold:#d8c48a; --gold-2:#d8c48a;
+  --curve:#1f9fb3; --sim:#c75560; --samp:#b38f2e;
+  --good:#7aa953; --good-bg:#1b2416; --warn:#dd7a3c; --warn-bg:#2a1a10; --bad:#c75560;
+  --grid:#2a2621;
+  --shadow:0 4px 20px rgba(0,0,0,.5), 0 1px 3px rgba(0,0,0,.4);
+  --shadow-lg:0 18px 46px rgba(0,0,0,.65), 0 2px 8px rgba(0,0,0,.5); color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --bg:#121110; --bg-2:#191715; --card:#1f1d1a; --fill:#26231f; --fill-2:#312d27;
+  --text:#f3eee6; --text-2:#a79c8c; --text-3:#8d8275;
+  --sep:#36312a; --sep-2:#2a2621;
+  --maroon:#c75560; --maroon-2:#d9747e; --gold:#d8c48a; --gold-2:#d8c48a;
+  --curve:#1f9fb3; --sim:#c75560; --samp:#b38f2e;
+  --good:#7aa953; --good-bg:#1b2416; --warn:#dd7a3c; --warn-bg:#2a1a10; --bad:#c75560;
+  --grid:#2a2621;
+  --shadow:0 4px 20px rgba(0,0,0,.5), 0 1px 3px rgba(0,0,0,.4);
+  --shadow-lg:0 18px 46px rgba(0,0,0,.65), 0 2px 8px rgba(0,0,0,.5); color-scheme:dark; }
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--ui);
+  font-size:var(--fs-5);line-height:1.55;-webkit-font-smoothing:antialiased;
+  font-variant-numeric:tabular-nums}
+
+.wrap{max-width:1040px;margin:0 auto;
+  padding-left:max(22px,env(safe-area-inset-left,0px));
+  padding-right:max(22px,env(safe-area-inset-right,0px));
+  padding-block:30px 64px}
+
+/* ---------- masthead ---------- */
+.mast{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap;
+  margin-bottom:20px}
+.mast h1{font-size:var(--fs-2);line-height:1.1;letter-spacing:-.03em;margin:0;font-weight:700}
+
+/* ---------- segmented control ---------- */
+.segwrap{overflow-x:auto;scrollbar-width:none;margin-bottom:26px;padding-bottom:2px}
+.segwrap::-webkit-scrollbar{display:none}
+.segmented{display:inline-flex;background:var(--fill);border-radius:13px;padding:4px;gap:0}
+.segmented button{appearance:none;border:none;background:none;white-space:nowrap;
+  padding:9px 17px;font:inherit;font-size:var(--fs-6);font-weight:600;color:var(--text-2);
+  cursor:pointer;border-radius:10px;transition:color .25s var(--ease),background .25s var(--ease)}
+.segmented button:hover{color:var(--text)}
+.segmented button[aria-current="true"]{background:var(--card);color:var(--maroon);
+  box-shadow:var(--shadow)}
+
+/* ---------- stage heading ---------- */
+h2{font-size:var(--fs-1);line-height:1.08;letter-spacing:-.035em;margin:0 0 10px;font-weight:700;
+   text-wrap:balance}
+@media (max-width:640px){ h2{font-size:var(--fs-2)} }
+.lede{margin:0 0 24px;color:var(--text-2);max-width:60ch;font-size:var(--fs-4)}
+.lede b{color:var(--text);font-weight:600}
+.eyebrow{display:none}
+
+/* ---------- cards ---------- */
+.lab{background:var(--card);border:1px solid var(--sep);border-radius:var(--r);overflow:hidden;
+  box-shadow:var(--shadow)}
+.lab + .lab{margin-top:16px}
+.card-h{padding:15px 20px 13px;border-bottom:1px solid var(--sep-2);display:flex;
+  align-items:center;gap:11px}
+.card-h .dot{width:23px;height:23px;border-radius:50%;display:grid;place-items:center;
+  background:var(--maroon);color:#fff;font-size:var(--fs-7);font-weight:700;flex:none}
+.card-h .ttl{font-size:var(--fs-4);font-weight:600;letter-spacing:-.01em}
+.card-h .right{margin-left:auto;display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+@media (max-width:560px){ .card-h{flex-wrap:wrap} .card-h .right{margin-left:0;width:100%} }
+.figwrap{padding:14px 16px 6px;min-width:0;position:relative}
+.panel{display:grid;grid-template-columns:minmax(0,1fr) 216px}
+.panel > .figwrap{display:flex;flex-direction:column;justify-content:center}
+@media (max-width:780px){ .panel{grid-template-columns:minmax(0,1fr)} }
+.side{border-left:1px solid var(--sep-2);background:var(--bg-2);padding:14px 15px;
+  display:flex;flex-direction:column;gap:12px;min-width:0}
+@media (max-width:780px){ .side{border-left:0;border-top:1px solid var(--sep-2)} }
+.side .ctrl{background:var(--card);padding:10px 12px}
+.side .btnrow{gap:6px}
+.side .btnrow button.b{flex:1 1 46px;padding:7px 10px;text-align:center}
+.sstat{display:flex;justify-content:space-between;align-items:baseline;gap:10px;
+  padding-bottom:8px;border-bottom:1px solid var(--sep-2)}
+.sstat:last-child{border-bottom:0;padding-bottom:0}
+.statgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px}
+.statgrid .sstat{flex-direction:column;align-items:flex-start;gap:1px;border-bottom:0;padding-bottom:0}
+.statgrid .sstat .v{font-size:var(--fs-5)}
+.sstat .k{color:var(--text-3);font-weight:600;font-size:var(--fs-7)}
+.sstat .v{font-weight:700;font-size:var(--fs-4);letter-spacing:-.02em}
+.sstat .v.curve{color:var(--curve)} .sstat .v.sim{color:var(--sim)} .sstat .v.samp{color:var(--samp)}
+canvas{display:block;width:100%;height:auto;max-width:100%;border-radius:var(--r-sm);touch-action:none}
+.cap{padding:0 20px 14px;color:var(--text-2);font-size:var(--fs-7)}
+
+.tip{position:absolute;pointer-events:none;opacity:0;transform:translate(-50%,-116%);
+  background:var(--text);color:var(--bg);font-size:var(--fs-7);font-weight:500;line-height:1.35;
+  padding:7px 10px;border-radius:9px;white-space:nowrap;transition:opacity .12s;z-index:5;
+  box-shadow:var(--shadow-lg)}
+.tip.on{opacity:1}
+
+/* ---------- control strip ---------- */
+.ctrls{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;
+  padding:16px 16px 18px;border-top:1px solid var(--sep-2);background:var(--bg-2)}
+.ctrl{background:var(--card);border:1px solid var(--sep-2);border-radius:var(--r-sm);
+  padding:12px 14px;min-width:0}
+.ctrl label{display:flex;justify-content:space-between;gap:10px;align-items:baseline;
+  font-size:var(--fs-7);letter-spacing:.02em;color:var(--text-3);font-weight:600}
+.ctrl label .v{font-size:var(--fs-6);letter-spacing:0;text-transform:none;color:var(--maroon);
+  font-weight:700}
+input[type=range]{width:100%;margin:10px 0 0;accent-color:var(--maroon);height:4px}
+button.b{font:inherit;font-size:var(--fs-6);font-weight:600;cursor:pointer;border-radius:999px;
+  border:1px solid var(--sep);background:var(--card);color:var(--text);padding:8px 15px;
+  transition:all .18s var(--ease)}
+button.b:hover{border-color:var(--maroon);color:var(--maroon)}
+button.b:active{transform:scale(.97)}
+button.b.on{background:var(--maroon);border-color:var(--maroon);color:#fff}
+button.b.big{background:var(--maroon);border-color:var(--maroon);color:#fff;font-weight:700}
+button.b.big:hover{opacity:.88;color:#fff}
+.btnrow{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+select{font:inherit;font-size:var(--fs-6);padding:9px 11px;border-radius:10px;
+  border:1px solid var(--sep);background:var(--card);color:var(--text);width:100%;margin-top:9px}
+:focus-visible{outline:2.5px solid var(--maroon);outline-offset:2px}
+
+/* ---------- readout tiles ---------- */
+.readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px;
+  padding:14px 16px;border-top:1px solid var(--sep-2)}
+.ro{background:var(--fill);border-radius:var(--r-sm);padding:13px 15px;min-width:0}
+.ro .k{font-size:var(--fs-7);letter-spacing:.02em;color:var(--text-3);font-weight:600}
+.ro .v{font-size:var(--fs-3);font-weight:700;line-height:1.15;margin-top:4px;letter-spacing:-.02em;
+  transition:color .2s}
+.ro .v.curve{color:var(--curve)} .ro .v.sim{color:var(--sim)} .ro .v.samp{color:var(--samp)}
+.ro .v.good{color:var(--good)} .ro .v.bad{color:var(--bad)} .ro .v.warn{color:var(--warn)}
+.ro .v.sm{font-size:var(--fs-5)}
+
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;padding:2px 20px 14px;font-size:var(--fs-7);
+  color:var(--text-2)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{width:14px;height:4px;border-radius:2px;display:inline-block}
+.legend i.box{width:12px;height:12px;border-radius:3px}
+code{font-family:var(--mono);font-size:.88em;background:var(--fill);padding:.12em .36em;border-radius:5px}
+
+/* ---------- flow chart ---------- */
+.flowwrap{padding:20px 16px 8px}
+.flowrow{margin-bottom:4px}
+.flowq{display:flex;align-items:center;gap:9px;font-size:var(--fs-8);letter-spacing:.09em;
+  text-transform:uppercase;font-weight:700;color:var(--text-3);margin-bottom:11px}
+.flowq .num{width:19px;height:19px;border-radius:50%;background:var(--gold);color:#fff;
+  display:grid;place-items:center;font-size:10px;letter-spacing:0}
+.opts{display:flex;gap:10px;flex-wrap:wrap}
+.node{appearance:none;text-align:left;background:var(--fill);border:1px solid transparent;
+  border-radius:var(--r-sm);padding:14px 15px;cursor:pointer;font:inherit;color:var(--text);
+  font-weight:600;font-size:var(--fs-6);line-height:1.3;flex:1 1 200px;min-width:0;
+  display:flex;gap:11px;align-items:flex-start;transition:all .18s var(--ease)}
+.node small{display:block;color:var(--text-2);font-size:var(--fs-7);font-weight:400;margin-top:3px}
+.node .ico{flex:none;width:32px;height:24px;color:var(--text-3)}
+.node:hover{background:var(--fill-2)}
+.node[aria-pressed="true"]{background:var(--card);border-color:var(--maroon);color:var(--maroon);
+  box-shadow:var(--shadow)}
+.node[aria-pressed="true"] .ico{color:var(--maroon)}
+.node[aria-pressed="true"] small{color:var(--text-2)}
+.connector{height:20px;margin-left:9px;border-left:2px dotted var(--sep);
+  animation:riseIn .32s var(--ease) both}
+.connector.lit{border-left-color:var(--maroon)}
+@keyframes riseIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
+
+.result{border-top:1px solid var(--sep-2);background:var(--maroon);color:#fff;padding:22px 20px;
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:center;
+  animation:riseIn .35s var(--ease) both}
+@media (max-width:640px){ .result{grid-template-columns:minmax(0,1fr)} }
+.result .tag{font-size:var(--fs-8);letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(255,255,255,.65);font-weight:700}
+.result .rname{font-size:var(--fs-2);font-weight:700;letter-spacing:-.03em;margin-top:5px;line-height:1.1}
+.result .rwhen{color:rgba(255,255,255,.80);font-size:var(--fs-6);margin-top:8px;max-width:54ch}
+.result .rcode{margin-top:14px;font-family:var(--mono);font-size:var(--fs-code);
+  background:rgba(0,0,0,.26);border-radius:10px;padding:11px 14px;overflow-x:auto;
+  white-space:pre;color:#fff}
+.result .rmeta{margin-top:12px;font-size:var(--fs-7);color:rgba(255,255,255,.78);
+  display:flex;gap:6px 18px;flex-wrap:wrap}
+.result .rmeta b{color:#fff;font-weight:700}
+.result .curvecard{background:rgba(255,255,255,.10);border-radius:var(--r-sm);padding:13px;
+  width:180px;max-width:100%}
+.result .curvecard .lbl{font-size:var(--fs-8);letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(255,255,255,.65);font-weight:700;margin-bottom:7px;text-align:center}
+.empty{padding:28px 20px;color:var(--text-3);font-size:var(--fs-6);text-align:center;
+  border-top:1px solid var(--sep-2);background:var(--bg-2)}
+
+.tblwrap{overflow-x:auto;border-top:1px solid var(--sep-2)}
+.tbl{width:100%;border-collapse:collapse;font-size:var(--fs-6)}
+.tbl th{font-size:var(--fs-8);letter-spacing:.07em;text-transform:uppercase;color:var(--text-3);
+  font-weight:700;text-align:left;padding:11px 16px;border-bottom:1px solid var(--sep-2);
+  white-space:nowrap}
+.tbl td{padding:10px 16px;border-bottom:1px solid var(--sep-2);vertical-align:top}
+.tbl td.mono{font-family:var(--mono);font-size:var(--fs-7);white-space:nowrap;color:var(--text-2)}
+.tbl tbody tr{transition:background .15s var(--ease)}
+.tbl tbody tr:hover{background:var(--bg-2)}
+.tbl tbody tr:last-child td{border-bottom:0}
+.tbl tr.cur td{background:var(--fill);font-weight:700}
+.tbl tr.cur td:first-child{box-shadow:inset 3px 0 0 var(--maroon)}
+
+/* ---------- quiz ---------- */
+.qhead{display:flex;align-items:center;gap:12px;padding:16px 20px 0}
+.dots{display:flex;gap:5px;flex-wrap:wrap}
+.dots i{width:8px;height:8px;border-radius:50%;background:var(--sep);display:inline-block;
+  transition:all .2s var(--ease)}
+.dots i.ok{background:var(--good)} .dots i.no{background:var(--warn)}
+.dots i.now{transform:scale(1.6);background:var(--maroon)}
+.qhead .tally{margin-left:auto;font-size:var(--fs-7);font-weight:700;color:var(--text-3)}
+.qbody{padding:14px 20px 4px}
+.qstem{font-size:var(--fs-4);margin:0 0 16px;max-width:64ch;line-height:1.45;font-weight:500}
+.qopt{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;margin:0 0 9px;
+  padding:13px 16px;white-space:normal;line-height:1.4;font-weight:500;border-radius:var(--r-sm);
+  background:var(--fill);border:1px solid transparent}
+.qopt:hover{background:var(--fill-2);border-color:transparent;color:var(--text)}
+.qopt .ltr{flex:none;width:22px;height:22px;border-radius:7px;background:var(--card);
+  display:grid;place-items:center;font-size:var(--fs-7);font-weight:700;color:var(--text-3)}
+.qopt.right{background:var(--good-bg);border-color:var(--good);color:var(--good)}
+.qopt.right .ltr{background:var(--good);color:#fff}
+.qopt.wrong{background:var(--warn-bg);border-color:var(--warn);color:var(--warn)}
+.qopt.wrong .ltr{background:var(--warn);color:#fff}
+.why{margin:14px 0 0;padding:15px 16px;background:var(--fill);border-radius:var(--r-sm);
+  display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;animation:riseIn .3s var(--ease) both}
+.pill{font-size:var(--fs-8);font-weight:800;letter-spacing:.08em;padding:5px 11px;border-radius:999px;
+  color:#fff;white-space:nowrap}
+.pill.ok{background:var(--good)} .pill.no{background:var(--warn)}
+.why p{margin:0;font-size:var(--fs-6);line-height:1.5;max-width:60ch;flex:1 1 300px;color:var(--text)}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+
+<div class="wrap">
+  <header class="mast">
+    <h1>Hypothesis Testing Lab</h1>
+  </header>
+  <div class="segwrap"><div class="segmented" id="nav"></div></div>
+  <main id="stage"></main>
+</div>
+
+<script>
+/* ============================================================ harness */
+const el=(t,c,h)=>{const n=document.createElement(t); if(c)n.className=c; if(h!=null)n.innerHTML=h; return n;};
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const fmt=(v,d=2)=>Number.isFinite(v)?v.toFixed(d):"—";
+const sum=a=>a.reduce((x,y)=>x+y,0);
+const mean=a=>sum(a)/a.length;
+function sdS(a){const m=mean(a);return Math.sqrt(sum(a.map(x=>(x-m)*(x-m)))/(a.length-1));}
+function sdP(a){const m=mean(a);return Math.sqrt(sum(a.map(x=>(x-m)*(x-m)))/a.length);}
+function quant(a,p){const b=a.slice().sort((x,y)=>x-y),h=(b.length-1)*p,lo=Math.floor(h),hi=Math.ceil(h);
+  return b[lo]+(b[hi]-b[lo])*(h-lo);}
+function rng(seed){let s=seed>>>0;return()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296;};}
+function gauss(r){let u=0,v=0;while(!u)u=r();while(!v)v=r();
+  return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+const REDUCED=matchMedia("(prefers-reduced-motion:reduce)").matches;
+
+/* the only distribution maths this page needs */
+function lgamma(x){
+  const g=[676.5203681218851,-1259.1392167224028,771.32342877765313,-176.61502916214059,
+    12.507343278686905,-0.13857109526572012,9.9843695780195716e-6,1.5056327351493116e-7];
+  if(x<0.5) return Math.log(Math.PI/Math.sin(Math.PI*x))-lgamma(1-x);
+  x-=1; let a=0.99999999999980993,t=x+7.5;
+  for(let i=0;i<8;i++) a+=g[i]/(x+i+1);
+  return 0.5*Math.log(2*Math.PI)+(x+0.5)*Math.log(t)-t+Math.log(a);
+}
+function gammaP(a,x){
+  if(x<=0) return 0;
+  if(x<a+1){ let ap=a,s=1/a,d=s;
+    for(let n=1;n<300;n++){ap++;d*=x/ap;s+=d;if(Math.abs(d)<Math.abs(s)*1e-15)break;}
+    return s*Math.exp(-x+a*Math.log(x)-lgamma(a)); }
+  const FP=1e-300,EPS=1e-15; let b=x+1-a,c=1/FP,d=1/b,h=d;
+  for(let i=1;i<300;i++){const an=-i*(i-a);b+=2;d=an*d+b;if(Math.abs(d)<FP)d=FP;
+    c=b+an/c;if(Math.abs(c)<FP)c=FP;d=1/d;const del=d*c;h*=del;if(Math.abs(del-1)<EPS)break;}
+  return 1-Math.exp(-x+a*Math.log(x)-lgamma(a))*h;
+}
+const erf=x=>(x<0?-1:1)*gammaP(0.5,x*x);
+const normPdf=x=>Math.exp(-0.5*x*x)/Math.sqrt(2*Math.PI);
+const normCdf=x=>0.5*(1+erf(x/Math.SQRT2));
+function invert(cdf,p,lo,hi){for(let i=0;i<200;i++){const m=(lo+hi)/2;if(cdf(m)<p)lo=m;else hi=m;}return (lo+hi)/2;}
+const zCrit=p=>invert(normCdf,p,-40,40);
+
+/* ---------- canvas with a hover layer ---------- */
+function makeCanvas(host,aspect,draw,hover){
+  const c=el("canvas"); host.append(c);
+  const ctx=c.getContext("2d");
+  let W=0,H=0;
+  function size(){
+    const w=c.clientWidth||host.clientWidth||640, h=Math.round(w*aspect);
+    const dpr=Math.min(window.devicePixelRatio||1,2);
+    c.width=Math.round(w*dpr); c.height=Math.round(h*dpr); c.style.height=h+"px";
+    ctx.setTransform(dpr,0,0,dpr,0,0); W=w; H=h;
+  }
+  const api={c,ctx,get w(){return W;},get h(){return H;},
+    render(){ size(); ctx.clearRect(0,0,W,H); draw(ctx,W,H); }};
+  new ResizeObserver(()=>api.render()).observe(c);
+  matchMedia("(prefers-color-scheme:dark)").addEventListener("change",()=>api.render());
+  if(hover){
+    const tip=el("div","tip"); host.append(tip);
+    const place=(x,y,html)=>{ if(html==null){tip.classList.remove("on");return;}
+      tip.innerHTML=html; tip.classList.add("on");
+      tip.style.left=clamp(x,60,host.clientWidth-60)+"px"; tip.style.top=y+"px"; };
+    c.addEventListener("pointermove",e=>{
+      const r=c.getBoundingClientRect();
+      hover(e.clientX-r.left,e.clientY-r.top,place,W,H);
+    });
+    c.addEventListener("pointerleave",()=>tip.classList.remove("on"));
+  }
+  return api;
+}
+/* a tween that respects reduced motion */
+function tween(ms,step,done){
+  if(REDUCED){ step(1); if(done) done(); return; }
+  const t0=performance.now();
+  (function frame(t){
+    const k=clamp((t-t0)/ms,0,1);
+    step(k<1 ? 1-Math.pow(1-k,3) : 1);
+    if(k<1) requestAnimationFrame(frame); else if(done) done();
+  })(t0);
+}
+function slider(host,{label,min,max,step,value,fmt:f=v=>v,on}){
+  const w=el("div","ctrl"), l=el("label"); l.append(el("span",null,label));
+  const val=el("span","v",f(value)); l.append(val);
+  const i=document.createElement("input");
+  i.type="range"; i.min=min; i.max=max; i.step=step; i.value=value;
+  i.id="s"+Math.random().toString(36).slice(2,8); l.setAttribute("for",i.id);
+  i.addEventListener("input",()=>{val.textContent=f(+i.value);on(+i.value);});
+  w.append(l,i); host.append(w);
+  return {input:i,set(v){i.value=v;val.textContent=f(+v);}};
+}
+function picker(host,{label,options,value,on}){
+  const w=el("div","ctrl"), l=el("label"); l.append(el("span",null,label)); w.append(l);
+  const s=document.createElement("select");
+  s.id="p"+Math.random().toString(36).slice(2,8); l.setAttribute("for",s.id);
+  options.forEach(([v,t])=>{const o=document.createElement("option");o.value=v;o.textContent=t;
+    if(v===value)o.selected=true;s.append(o);});
+  s.addEventListener("change",()=>on(s.value));
+  w.append(s); host.append(w); return s;
+}
+function buttons(host,label,items){
+  const w=el("div","ctrl"); if(label){const l=el("label");l.append(el("span",null,label));w.append(l);}
+  const r=el("div","btnrow"); r.style.marginTop="7px";
+  items.forEach(it=>{const b=el("button","b"+(it.big?" big":""),it.t);
+    b.addEventListener("click",()=>it.on(b)); r.append(b); it.el=b;});
+  w.append(r); host.append(w); return items;
+}
+function readouts(host,keys){
+  const w=el("div","readout"), out={};
+  keys.forEach(([k,label,cls])=>{
+    const d=el("div","ro"); d.append(el("div","k",label));
+    const v=el("div","v"+(cls?" "+cls:""),"—"); d.append(v); out[k]=v; w.append(d);
+  });
+  host.append(w); return out;
+}
+function legend(host,items){
+  const w=el("div","legend");
+  items.forEach(([color,text,kind])=>{const s=el("span"); const i=el("i",kind||"");
+    i.style.background=color; s.append(i,document.createTextNode(text)); w.append(s);});
+  host.append(w);
+}
+function panel(lab){
+  const p=el("div","panel"), fig=el("div","figwrap"), side=el("div","side");
+  p.append(fig,side); lab.append(p); return {fig,side};
+}
+function sideStats(side,keys,grid){
+  const out={};
+  const host=grid?el("div","statgrid"):side;
+  if(grid) side.append(host);
+  keys.forEach(([k,label,cls])=>{
+    const r=el("div","sstat");
+    r.append(el("span","k",label));
+    const v=el("span","v"+(cls?" "+cls:""),"\u2014");
+    r.append(v); out[k]=v; host.append(r);
+  });
+  return out;
+}
+function sect(lab,num,title){
+  const h=el("div","card-h"); h.append(el("span","dot",String(num)));
+  h.append(el("span","ttl",title)); lab.append(h); return h;
+}
+/* rounded-top bar, 2px gap, anchored to the baseline */
+function roundBar(ctx,x,y,w,h,r,fill,stroke){
+  if(h<=0.5) return;
+  const rr=Math.min(r,w/2,h);
+  ctx.beginPath();
+  ctx.moveTo(x,y+h); ctx.lineTo(x,y+rr);
+  ctx.quadraticCurveTo(x,y,x+rr,y);
+  ctx.lineTo(x+w-rr,y); ctx.quadraticCurveTo(x+w,y,x+w,y+rr);
+  ctx.lineTo(x+w,y+h); ctx.closePath();
+  ctx.fillStyle=fill; ctx.fill();
+  if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=1.5;ctx.stroke();}
+}
+function frame(ctx,w,h,m,xd,yd){
+  const L=m[3],R=w-m[1],T=m[0],B=h-m[2];
+  const X=v=>L+(v-xd[0])/(xd[1]-xd[0])*(R-L);
+  const Y=v=>B-(v-yd[0])/(yd[1]-yd[0])*(B-T);
+  const api={L,R,T,B,X,Y,xd,yd,
+    grid(nx,ny,labx,laby){
+      ctx.strokeStyle=css("--grid"); ctx.lineWidth=1; ctx.fillStyle=css("--ink-2");
+      ctx.font='11.5px "Commissioner",sans-serif';
+      for(let i=0;i<=ny;i++){const v=yd[0]+(yd[1]-yd[0])*i/ny,y=Y(v);
+        ctx.beginPath();ctx.moveTo(L,y);ctx.lineTo(R,y);ctx.stroke();
+        if(laby){ctx.textAlign="right";ctx.textBaseline="middle";ctx.fillText(laby(v),L-8,y);}}
+      for(let i=0;i<=nx;i++){const v=xd[0]+(xd[1]-xd[0])*i/nx,x=X(v);
+        if(labx){ctx.textAlign="center";ctx.textBaseline="top";ctx.fillText(labx(v),x,B+8);}}
+      ctx.strokeStyle=css("--line"); ctx.lineWidth=1.5;
+      ctx.beginPath(); ctx.moveTo(L,B+.5); ctx.lineTo(R,B+.5); ctx.stroke();
+    },
+    axisLabel(xt){ctx.fillStyle=css("--ink-2");ctx.font='600 11.5px "Commissioner",sans-serif';
+      ctx.textAlign="center";ctx.textBaseline="bottom";if(xt)ctx.fillText(xt,(L+R)/2,h-2);},
+    clipIn(fn){ctx.save();ctx.beginPath();ctx.rect(L-1,T-30,R-L+2,B-T+32);ctx.clip();fn();ctx.restore();},
+    vline(x,color,width,dash){ctx.save();ctx.beginPath();ctx.setLineDash(dash||[]);
+      ctx.moveTo(X(x),T);ctx.lineTo(X(x),B);ctx.strokeStyle=color;ctx.lineWidth=width||1.6;
+      ctx.stroke();ctx.restore();},
+    tag(x,text,color,yoff){
+      ctx.font='700 11px "Commissioner",sans-serif';
+      const wd=ctx.measureText(text).width, px=clamp(X(x),L+wd/2+6,R-wd/2-6), py=T+(yoff||2);
+      ctx.fillStyle=css("--card"); ctx.globalAlpha=.85;
+      ctx.fillRect(px-wd/2-5,py-1,wd+10,15); ctx.globalAlpha=1;
+      ctx.fillStyle=color; ctx.textAlign="center"; ctx.textBaseline="top"; ctx.fillText(text,px,py);},
+    line(pts,color,width,dash){ctx.save();ctx.beginPath();ctx.setLineDash(dash||[]);
+      pts.forEach((p,i)=>i?ctx.lineTo(X(p[0]),Y(p[1])):ctx.moveTo(X(p[0]),Y(p[1])));
+      ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineJoin="round";ctx.lineCap="round";
+      ctx.stroke();ctx.restore();},
+    area(pts,fill){if(!pts.length)return;ctx.save();ctx.beginPath();
+      ctx.moveTo(X(pts[0][0]),Y(0));pts.forEach(p=>ctx.lineTo(X(p[0]),Y(p[1])));
+      ctx.lineTo(X(pts[pts.length-1][0]),Y(0));ctx.closePath();ctx.fillStyle=fill;ctx.fill();ctx.restore();},
+    fade(pts,c1,c2){ if(!pts.length) return; const g=ctx.createLinearGradient(0,T,0,B);
+      g.addColorStop(0,c1); g.addColorStop(1,c2); api.area(pts,g); },
+    hist(vals,lo,hi,bins,fill,stroke,scale){
+      const counts=new Array(bins).fill(0), wd=(hi-lo)/bins;
+      vals.forEach(v=>{if(v>=lo&&v<hi)counts[Math.floor((v-lo)/wd)]++;});
+      const n=vals.length||1;
+      api.clipIn(()=>{for(let i=0;i<bins;i++){
+        const d=counts[i]/(n*wd); if(d<=0) continue;
+        const x0=X(lo+i*wd), x1=X(lo+(i+1)*wd), yT=Y(d*(scale==null?1:scale));
+        roundBar(ctx,x0+1,yT,Math.max(1.5,x1-x0-2),Y(0)-yT,4,fill,stroke);
+      }});
+      return {counts,width:wd,peak:Math.max(...counts.map(c=>c/(n*wd)))};
+    }};
+  return api;
+}
+function tint(tok,a){
+  const h=css(tok).replace("#","");
+  const n=h.length===3?h.split("").map(c=>parseInt(c+c,16)):[0,2,4].map(i=>parseInt(h.slice(i,i+2),16));
+  return "rgba("+n[0]+","+n[1]+","+n[2]+","+Math.max(0,Math.min(1,a)).toFixed(3)+")";
+}
+const curvePts=(f,lo,hi,steps)=>{const p=[];for(let i=0;i<=steps;i++){const x=lo+(hi-lo)*i/steps;p.push([x,f(x)]);}return p;};
+const MODULES=[];
+</script>
+
+<script>
+/* ============================================================ 1. sampling distributions */
+MODULES.push({
+ name:"Sampling distribution",
+ title:"Draw one sample. Then draw a thousand.",
+ lede:"Pick a population, take a sample of size n, compute a statistic. Do it again and the "+
+      "statistic comes out different. <b>The pile those repeats make is the sampling "+
+      "distribution</b>, and every p-value is read off it.",
+ build(host){
+  let shape="skew", n=10, stat="mean", showCurve=true;
+  let pop=[], last=[], draws=[], seed=1, dropK=1, sampleK=1, lastStat=null;
+
+  function buildPop(){
+    const r=rng(20260420), out=[];
+    for(let i=0;i<5000;i++){
+      if(shape==="normal")       out.push(50+10*gauss(r));
+      else if(shape==="uniform") out.push(20+60*r());
+      else if(shape==="skew")    out.push(20+Math.exp(1.0+0.58*gauss(r))*6);
+      else                       out.push(r()<0.5 ? 32+6*gauss(r) : 68+6*gauss(r));
+    }
+    pop=out;
+  }
+  const statOf=s=> stat==="mean"?mean(s) : stat==="sd"?sdS(s) : quant(s,0.5);
+  const statName=()=> stat==="mean"?"sample mean" : stat==="sd"?"sample sd" : "sample median";
+  const statSym=()=> stat==="mean"?"mean" : stat==="sd"?"s" : "median";
+  const lo=()=>Math.min(...pop), hi=()=>Math.max(...pop);
+
+  function drawSample(){ const r=rng(seed++), s=[];
+    for(let i=0;i<n;i++) s.push(pop[Math.floor(r()*pop.length)%pop.length]); return s; }
+  function take(k){
+    for(let i=0;i<k;i++){ last=drawSample(); lastStat=statOf(last); draws.push(lastStat); }
+    paint();
+    sampleK=0; dropK=0;
+    tween(k>1?400:580,t=>{ sampleK=t; dropK=t; cv2.render(); cv3.render(); });
+  }
+
+  /* ---------- 1 - population ---------- */
+  const lab1=el("div","lab"); sect(lab1,1,"The population");
+  const p1=panel(lab1);
+  const cv1=makeCanvas(p1.fig,0.30,(c,W,H)=>{
+    const L=lo(),Hh=hi(),bins=46,wd=(Hh-L)/bins,cnt=new Array(bins).fill(0);
+    pop.forEach(v=>cnt[clamp(Math.floor((v-L)/wd),0,bins-1)]++);
+    const dens=cnt.map(x=>x/(pop.length*wd));
+    const fr=frame(c,W,H,[14,14,30,38],[L,Hh],[0,Math.max(...dens)*1.18]);
+    fr.grid(5,0,x=>x.toFixed(0),null);
+    fr.clipIn(()=>{ for(let i=0;i<bins;i++){ if(!dens[i])continue;
+      const x0=fr.X(L+i*wd),x1=fr.X(L+(i+1)*wd),yT=fr.Y(dens[i]);
+      roundBar(c,x0+1,yT,Math.max(1.5,x1-x0-2),fr.Y(0)-yT,3,tint("--curve",0.30),null); }});
+    fr.vline(mean(pop),css("--curve"),2,[6,4]);
+    fr.tag(mean(pop),"\u03bc = "+fmt(mean(pop),1),css("--curve"),0);
+  });
+  picker(p1.side,{label:"Population distribution is",value:"skew",options:[
+    ["normal","Normal"],["uniform","Uniform"],["skew","Skewed"],["bimodal","Bimodal"]],
+    on:v=>{shape=v;draws=[];last=[];lastStat=null;paint();}});
+  const ro1=sideStats(p1.side,[["mu","population mean \u03bc","curve"],
+    ["sg","population sd \u03c3","curve"]]);
+  host.append(lab1);
+
+  /* ---------- 2 - one sample ---------- */
+  const lab2=el("div","lab"); sect(lab2,2,"One random sample of size n");
+  const p2=panel(lab2);
+  const cv2=makeCanvas(p2.fig,0.21,(c,W,H)=>{
+    const fr=frame(c,W,H,[14,14,30,38],[lo(),hi()],[0,1]);
+    fr.grid(5,0,x=>x.toFixed(0),null);
+    if(!last.length){
+      c.fillStyle=css("--text-3"); c.font='13px "Commissioner",sans-serif';
+      c.textAlign="center"; c.textBaseline="middle";
+      c.fillText("Draw a sample \u2192",(fr.L+fr.R)/2,(fr.T+fr.B)/2); return;
+    }
+    fr.clipIn(()=>{
+      const used={};
+      last.forEach((v,i)=>{
+        const show=clamp(sampleK*last.length-i,0,1); if(show<=0) return;
+        const x=Math.round(fr.X(v)); used[x]=(used[x]||0)+1;
+        const y=fr.B-8-(used[x]-1)*8;
+        c.globalAlpha=show;
+        c.beginPath(); c.arc(x,y-(1-show)*22,4.2*(0.5+0.5*show),0,7);
+        c.fillStyle=tint("--samp",0.55); c.fill();
+        c.strokeStyle=css("--samp"); c.lineWidth=1.3; c.stroke();
+        c.globalAlpha=1;
+      });
+    });
+    const m=statOf(last);
+    if(stat!=="sd"){ fr.vline(m,css("--sim"),2.4); fr.tag(m,statSym()+" = "+fmt(m,1),css("--sim"),0); }
+  });
+  slider(p2.side,{label:"Sample size n",min:2,max:100,step:1,value:10,
+    on:v=>{n=v;draws=[];last=[];lastStat=null;paint();}});
+  const ro2=sideStats(p2.side,[["sm","this sample's statistic","sim"],
+    ["sx","its mean","samp"],["ss","its sd","samp"]]);
+  host.append(lab2);
+
+  /* ---------- 3 - the sampling distribution ---------- */
+  const lab3=el("div","lab"); sect(lab3,3,"Approximate sampling distribution");
+  const p3=panel(lab3);
+  let lastFrame=null;
+  const cv3=makeCanvas(p3.fig,0.36,(c,W,H)=>{
+    if(!draws.length){
+      const fr=frame(c,W,H,[14,14,32,38],[0,1],[0,1]); fr.grid(4,3,null,null);
+      c.fillStyle=css("--text-3"); c.font='13px "Commissioner",sans-serif';
+      c.textAlign="center"; c.textBaseline="middle";
+      c.fillText("Their "+statName()+"s pile up here.",(fr.L+fr.R)/2,(fr.T+fr.B)/2);
+      lastFrame=null; return;
+    }
+    const m=mean(draws), s=(draws.length>1?sdS(draws):1)||1;
+    const a=Math.min(...draws), b=Math.max(...draws);
+    const pad=(b-a)*0.14+s*0.5, L=a-pad, Hh=b+pad;
+    const probe=frame(c,W,H,[14,14,32,38],[L,Hh],[0,1]);
+    const peak=probe.hist(draws,L,Hh,30,"rgba(0,0,0,0)",null).peak;
+    const top=Math.max(peak,showCurve?normPdf(0)/s:0)*1.22||1;
+    const fr=frame(c,W,H,[14,14,32,38],[L,Hh],[0,top]);
+    fr.grid(5,3,x=>x.toFixed(1),null);
+    const info=fr.hist(draws,L,Hh,30,tint("--sim",0.42),css("--sim"));
+    if(showCurve) fr.clipIn(()=>{
+      fr.fade(curvePts(x=>normPdf((x-m)/s)/s,L,Hh,220),tint("--curve",0.16),tint("--curve",0.02));
+      fr.line(curvePts(x=>normPdf((x-m)/s)/s,L,Hh,220),css("--curve"),2.4);
+    });
+    fr.vline(m,css("--sim"),1.8,[6,4]);
+    if(lastStat!=null && dropK<1){
+      const x=fr.X(lastStat), y=fr.T+(fr.B-fr.T)*dropK;
+      c.globalAlpha=1-dropK*0.2;
+      c.beginPath(); c.arc(x,y,6.5,0,7); c.fillStyle=css("--samp"); c.fill();
+      c.strokeStyle=css("--card"); c.lineWidth=2; c.stroke(); c.globalAlpha=1;
+    }
+    lastFrame={fr,L,Hh,info};
+  },(mx,my,place)=>{
+    if(!lastFrame) return place(null);
+    const {fr,L,Hh,info}=lastFrame;
+    if(mx<fr.L||mx>fr.R||my<fr.T||my>fr.B) return place(null);
+    const v=L+(mx-fr.L)/(fr.R-fr.L)*(Hh-L);
+    const i=clamp(Math.floor((v-L)/info.width),0,info.counts.length-1);
+    place(mx,my,"<b>"+info.counts[i]+"</b> of "+draws.length+" samples<br>"+
+      fmt(L+i*info.width,2)+" to "+fmt(L+(i+1)*info.width,2));
+  });
+  picker(p3.side,{label:"Sampling distribution of",value:"mean",options:[
+    ["mean","the sample mean"],["sd","the sample standard deviation"],["median","the sample median"]],
+    on:v=>{stat=v;draws=[];lastStat=null;paint();}});
+  const drawBox=el("div","ctrl");
+  drawBox.append(el("label",null,"<span>Draw random samples</span>"));
+  const row=el("div","btnrow"); row.style.marginTop="8px";
+  [["1",()=>take(1)],["10",()=>take(10)],["100",()=>take(100)],["1,000",()=>take(1000)],
+   ["Reset",()=>{draws=[];last=[];lastStat=null;seed=1;paint();}]]
+   .forEach(([t,fn])=>{ const b=el("button","b"+(t==="1,000"?" big":""),t);
+     b.addEventListener("click",fn); row.append(b); });
+  drawBox.append(row); p3.side.append(drawBox);
+  const ro3=sideStats(p3.side,[["k","samples","sim"],["dm","centre","sim"],
+    ["ds","spread","sim"],["pr","\u03c3/\u221an","curve"]],true);
+  const curveBtn=el("button","b on","Normal curve");
+  curveBtn.style.marginTop="2px";
+  curveBtn.addEventListener("click",()=>{showCurve=!showCurve;
+    curveBtn.classList.toggle("on",showCurve); cv3.render();});
+  p3.side.append(curveBtn);
+  host.append(lab3);
+
+  function paint(){
+    buildPop(); cv1.render(); cv2.render(); cv3.render();
+    ro1.mu.textContent=fmt(mean(pop),2);
+    ro1.sg.textContent=fmt(sdP(pop),2);
+    ro2.sm.textContent=last.length?fmt(statOf(last),2):"\u2014";
+    ro2.sx.textContent=last.length?fmt(mean(last),2):"\u2014";
+    ro2.ss.textContent=last.length?fmt(sdS(last),2):"\u2014";
+    ro3.k.textContent=draws.length.toLocaleString();
+    ro3.dm.textContent=draws.length?fmt(mean(draws),2):"\u2014";
+    ro3.ds.textContent=draws.length>1?fmt(sdS(draws),3):"\u2014";
+    ro3.pr.textContent=stat==="mean"?fmt(sdP(pop)/Math.sqrt(n),3):"\u2014";
+  }
+  paint();
+ }
+});
+</script>
+
+<script>
+/* ============================================================ 2. the two errors */
+MODULES.push({
+ name:"Type I & II errors",
+ title:"Two ways to be wrong",
+ lede:"Reject when nothing is going on and you have made a <b>Type I error</b>; its rate is the "+
+      "significance level \u03b1, which you choose. Fail to reject when something really is going on "+
+      "and you have made a <b>Type II error</b>, at rate \u03b2, which follows from the effect size "+
+      "and the sample size.",
+ build(host){
+  let d=0.4, n=40, alpha=0.05;
+  const lam=()=>d*Math.sqrt(n);
+  const beta=()=>{const zc=zCrit(1-alpha/2),l=lam();
+    return normCdf(zc-l)-normCdf(-zc-l);};
+
+  const lab=el("div","lab");
+  sect(lab,1,"Where the two errors live");
+  const fig=el("div","figwrap"); lab.append(fig);
+  const cv=makeCanvas(fig,0.46,(c,W,H)=>{
+    const l=lam(), zc=zCrit(1-alpha/2);
+    const lo=Math.min(-4.2,l-4.2), hi=Math.max(4.2,l+4.2);
+    const fr=frame(c,W,H,[46,16,38,16],[lo,hi],[0,normPdf(0)*1.34]);
+    fr.grid(6,0,x=>x.toFixed(0),null);
+    fr.axisLabel("the test statistic");
+    const n0=curvePts(x=>normPdf(x),lo,hi,320), n1=curvePts(x=>normPdf(x-l),lo,hi,320);
+    fr.clipIn(()=>{
+      fr.area(n1.filter(q=>q[0]>=-zc&&q[0]<=zc),tint("--warn",0.38));
+      fr.area(n0.filter(q=>q[0]>=zc),tint("--bad",0.48));
+      fr.area(n0.filter(q=>q[0]<=-zc),tint("--bad",0.48));
+      fr.line(n0,css("--curve"),2.8);
+      fr.line(n1,css("--sim"),2.8,[7,5]);
+      [-zc,zc].forEach(z=>fr.vline(z,css("--text-2"),1.5,[4,4]));
+    });
+    /* label the curves and both error regions on the plot itself */
+    c.font='700 12px "Commissioner",sans-serif'; c.textAlign="center"; c.textBaseline="top";
+    c.fillStyle=css("--curve"); c.fillText("H\u2080 true \u00b7 no real difference",fr.X(0),fr.T-34);
+    c.fillStyle=css("--sim");   c.fillText("H\u2081 true \u00b7 a difference this big",fr.X(l),fr.T-34);
+    /* each error labelled over its own region, with a leader into the shading */
+    function chip(px,py,text,colour,toX,toY){
+      c.font='700 11.5px "Commissioner",sans-serif';
+      const wd=c.measureText(text).width;
+      px=clamp(px,fr.L+wd/2+6,fr.R-wd/2-6);
+      if(toX!=null){ c.strokeStyle=colour; c.lineWidth=1.3; c.setLineDash([3,3]);
+        c.beginPath(); c.moveTo(px,py+9); c.lineTo(toX,toY); c.stroke(); c.setLineDash([]); }
+      c.fillStyle=css("--card"); c.globalAlpha=.9;
+      c.fillRect(px-wd/2-7,py-5,wd+14,19); c.globalAlpha=1;
+      c.fillStyle=colour; c.textAlign="center"; c.textBaseline="top"; c.fillText(text,px,py);
+    }
+    chip(fr.X(zc)+(fr.R-fr.X(zc))/2, fr.B-96,
+         "Type I  \u03b1 = "+alpha.toFixed(2), css("--bad"),
+         fr.X(zc)+Math.min(26,(fr.R-fr.X(zc))/2), fr.B-8);
+    chip(fr.X(Math.max(-zc,Math.min(zc,l)-1.35)), fr.B-150,
+         "Type II  \u03b2 = "+beta().toFixed(2), css("--warn"),
+         fr.X(Math.max(-zc,Math.min(zc,l)-0.6)), fr.B-26);
+    c.fillStyle=css("--text-2"); c.font='600 11px "Commissioner",sans-serif';
+    c.textAlign="center"; c.textBaseline="top";
+    c.fillText("reject outside \u00b1"+fmt(zc,2),fr.X(0),fr.T+4);
+  });
+  legend(lab,[[tint("--bad",0.85),"Type I error \u00b7 rejecting a true H\u2080","box"],
+    [tint("--warn",0.85),"Type II error \u00b7 missing a real difference","box"],
+    [css("--curve"),"H\u2080 curve"],[css("--sim"),"H\u2081 curve"]]);
+  const ro=readouts(lab,[["a","Type I error rate \u03b1","bad"],["b","Type II error rate \u03b2","warn"],
+    ["n","sample size","sm"],["e","effect size","sm"],["crit","reject beyond","sm"]]);
+  const ctr=el("div","ctrls"); lab.append(ctr);
+  slider(ctr,{label:"Effect size \u00b7 how big the real difference is",min:0.1,max:1.2,step:0.05,
+    value:0.4,fmt:v=>v.toFixed(2)+" sd",on:v=>{d=v;go();}});
+  slider(ctr,{label:"Sample size n",min:5,max:200,step:5,value:40,on:v=>{n=v;go();}});
+  slider(ctr,{label:"Significance level \u03b1",min:0.01,max:0.20,step:0.01,value:0.05,
+    fmt:v=>v.toFixed(2),on:v=>{alpha=v;go();}});
+  host.append(lab);
+
+  /* ---- the 2 x 2 table of what can happen ---- */
+  const lab2=el("div","lab");
+  sect(lab2,2,"The four outcomes");
+  const T=el("div","tblwrap"); lab2.append(T);
+  host.append(lab2);
+
+  function grid(){
+    T.textContent="";
+    const tb=el("table","tbl"), th=el("thead"), hr=el("tr");
+    ["","H\u2080 is true","H\u2081 is true"].forEach(h=>hr.append(el("th",null,h)));
+    th.append(hr); tb.append(th);
+    const bd=el("tbody"), b=beta();
+    const rows=[
+     ["You reject H\u2080",
+      ["<b>Type I error</b><br>rate \u03b1 = "+alpha.toFixed(2),"bad"],
+      ["Correct \u00b7 you found it<br>rate 1 \u2212 \u03b2 = "+(1-b).toFixed(2),"good"]],
+     ["You do not reject",
+      ["Correct<br>rate 1 \u2212 \u03b1 = "+(1-alpha).toFixed(2),"good"],
+      ["<b>Type II error</b><br>rate \u03b2 = "+b.toFixed(2),"warn"]]];
+    rows.forEach(r=>{
+      const tr=el("tr");
+      tr.append(el("td",null,"<b>"+r[0]+"</b>"));
+      [r[1],r[2]].forEach(([html,tone])=>{
+        const td=el("td",null,html);
+        td.style.background="color-mix(in srgb,var(--"+tone+") 12%,transparent)";
+        td.style.color="var(--"+tone+")";
+        tr.append(td);
+      });
+      bd.append(tr);
+    });
+    tb.append(bd); T.append(tb);
+  }
+
+  function go(){
+    cv.render(); grid();
+    const b=beta();
+    ro.a.textContent=(alpha*100).toFixed(0)+"%";
+    ro.b.textContent=(b*100).toFixed(0)+"%";
+    ro.n.textContent=n;
+    ro.e.textContent=d.toFixed(2)+" sd";
+    ro.crit.textContent="\u00b1"+fmt(zCrit(1-alpha/2),2);
+    ro.b.className="v "+(b>0.5?"bad":b>0.2?"warn":"good");
+  }
+  go();
+ }
+});
+</script>
+
+<script>
+/* ============================================================ 3. pick your test */
+MODULES.push({
+ name:"Pick your test",
+ title:"Three questions, one test",
+ lede:"Answer in order. Each answer lights the next branch, and the ten tests sit at the ends of "+
+      "the tree. <b>The design and the shape of the data choose the test</b> &mdash; never the p-value "+
+      "you were hoping for.",
+ build(host){
+  let q1=null,q2=null,q3=null;
+
+  /* ---- small inline glyphs, drawn in currentColor ---- */
+  const ICO={
+   number:'<svg class="ico" viewBox="0 0 34 26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 22h28"/><path d="M8 22V12M15 22V6M22 22V15M29 22V9"/></svg>',
+   counts:'<svg class="ico" viewBox="0 0 34 26" fill="currentColor"><rect x="3" y="12" width="7" height="10" rx="2"/><rect x="13" y="5" width="7" height="17" rx="2"/><rect x="23" y="15" width="7" height="7" rx="2"/></svg>',
+   one:'<svg class="ico" viewBox="0 0 34 26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 21c6 0 5-15 11-15s5 15 11 15"/><path d="M28 4v18" stroke-dasharray="3 3"/></svg>',
+   two:'<svg class="ico" viewBox="0 0 34 26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M1 21c4 0 3-12 7-12s3 12 7 12"/><path d="M19 21c4 0 3-12 7-12s3 12 7 12"/></svg>',
+   paired:'<svg class="ico" viewBox="0 0 34 26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="7" cy="8" r="3.4"/><circle cx="27" cy="8" r="3.4"/><circle cx="7" cy="19" r="3.4"/><circle cx="27" cy="19" r="3.4"/><path d="M11 8h12M11 19h12" stroke-dasharray="3 3"/></svg>',
+   many:'<svg class="ico" viewBox="0 0 34 26" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"><path d="M1 21c3 0 2-10 5-10s2 10 5 10"/><path d="M12 21c3 0 2-13 5-13s2 13 5 13"/><path d="M23 21c3 0 2-8 5-8s2 8 5 8"/></svg>',
+   shares:'<svg class="ico" viewBox="0 0 34 26" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="7" width="10" height="14" rx="2"/><rect x="21" y="7" width="10" height="14" rx="2" stroke-dasharray="3 3"/><path d="M14 14h6" stroke-linecap="round"/></svg>',
+   table:'<svg class="ico" viewBox="0 0 34 26" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="5" width="26" height="17" rx="2.5"/><path d="M4 11h26M17 5v17"/></svg>',
+   sym:'<svg class="ico" viewBox="0 0 34 26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 21c6 0 5-15 15-15s9 15 15 15"/></svg>',
+   skew:'<svg class="ico" viewBox="0 0 34 26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 21c3 0 3-14 8-14s4 8 8 11 10 3 14 3"/></svg>',
+   known:'<svg class="ico" viewBox="0 0 34 26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 21c6 0 5-13 13-13s7 13 13 13"/><path d="M26 6h6M29 3v6"/></svg>'
+  };
+  const bell='M0 46 C 14 46, 16 6, 30 6 S 46 46, 60 46';
+  const rskew='M0 46 C 6 46, 8 8, 16 8 S 26 36, 36 42 S 50 46, 60 46';
+
+  const TESTS={
+   t1:{name:"One-sample t-test",curveShape:bell,
+       when:"One group of numbers against a fixed target, with the spread estimated from the sample. The everyday choice.",
+       code:"t_stat, p_val = stats.ttest_1samp(df[col], popmean=target)",curve:"t with n − 1 df",
+       ex:"Is average resolution time different from the 10-minute promise?",pair:"Wilcoxon signed-rank"},
+   z1:{name:"One-sample z-test",curveShape:bell,
+       when:"The same question when the sample is large or the population spread is genuinely known.",
+       code:"z_stat, p_val = ztest(df[col], value=target)",curve:"the standard normal",
+       ex:"Is this month's average basket different from last year's $45?",pair:"Wilcoxon signed-rank"},
+   w1:{name:"Wilcoxon signed-rank",curveShape:bell,
+       when:"One group against a target when the data is skewed or the sample is small. Compares ranks, not means.",
+       code:"stat, p_val = wilcoxon(df[col] - target)",curve:"ranks · normal for larger n",
+       ex:"Is the median pickup wait different from 4 minutes?",pair:"one-sample t-test"},
+   t2:{name:"Independent t-test",curveShape:bell,
+       when:"Two separate groups of numbers, reasonably symmetric. Keep equal_var=False.",
+       code:"t_stat, p_val = stats.ttest_ind(g1, g2, equal_var=False)",curve:"t · Welch df",
+       ex:"Do phone tickets take longer than chat tickets?",pair:"Mann-Whitney U"},
+   mw:{name:"Mann-Whitney U",curveShape:bell,
+       when:"Two separate groups when the data is skewed or has an extreme value. Compares ranks.",
+       code:"u_stat, p_val = mannwhitneyu(g1, g2)",curve:"ranks · normal for larger n",
+       ex:"Do North and South differ on a heavily skewed wait time?",pair:"independent t-test"},
+   tp:{name:"Paired t-test",curveShape:bell,
+       when:"The same units measured twice. Pairing removes the differences between units and leaves each one's own change.",
+       code:"t_stat, p_val = stats.ttest_rel(df[before], df[after])",curve:"t with pairs − 1 df",
+       ex:"Did handle time change after the new tool, agent by agent?",pair:"Wilcoxon signed-rank"},
+   wp:{name:"Wilcoxon signed-rank",curveShape:bell,
+       when:"The same units twice, when the changes are skewed or one pair moves wildly.",
+       code:"stat, p_val = wilcoxon(after, before)",curve:"ranks · normal for larger n",
+       ex:"Did delivery time change after the routing app, courier by courier?",pair:"paired t-test"},
+   an:{name:"ANOVA",curveShape:rskew,
+       when:"Three or more group means at once, so you do not run three tests and treble your error rate.",
+       code:"f_stat, p_val = stats.f_oneway(g1, g2, g3)",curve:"F with k−1 and N−k df",
+       ex:"Do email, chat and phone resolve in the same average time?",pair:"pairwise tests, with a correction"},
+   gf:{name:"Chi-square goodness of fit",curveShape:rskew,
+       when:"Counts in categories against shares you expected. Every expected count should be at least 5.",
+       code:"chi2, p_val = stats.chisquare(observed, f_exp=expected)",curve:"χ² with k − 1 df",
+       ex:"Do tickets arrive evenly across the seven weekdays?",pair:null},
+   ind:{name:"Chi-square independence",curveShape:rskew,
+       when:"Two categorical variables, to see whether one depends on the other. Association, not cause.",
+       code:"chi2, p_val, dof, expected = stats.chi2_contingency(pd.crosstab(a, b))",
+       curve:"χ² with (r−1)(c−1) df",
+       ex:"Does first-contact resolution depend on the channel?",pair:null}};
+
+  function result(){
+    if(q1==="counts") return q2==="shares"?"gf":q2==="table"?"ind":null;
+    if(q1!=="number") return null;
+    if(q2==="many") return "an";
+    if(!q2||!q3) return null;
+    if(q2==="one")    return q3==="skew"?"w1":q3==="known"?"z1":"t1";
+    if(q2==="two")    return q3==="skew"?"mw":"t2";
+    if(q2==="paired") return q3==="skew"?"wp":"tp";
+    return null;
+  }
+
+  const lab=el("div","lab");
+  const flow=el("div","flowwrap"); lab.append(flow);
+  const res=el("div"); lab.append(res);
+  host.append(lab);
+
+  function row(num,label,opts,current,on){
+    const w=el("div","flowrow");
+    const q=el("div","flowq"); q.append(el("span","num",String(num)));
+    q.append(el("span",null,label)); w.append(q);
+    const o=el("div","opts");
+    opts.forEach(([v,t,sub,ico])=>{
+      const b=el("button","node",(ICO[ico]||"")+"<span>"+t+(sub?"<small>"+sub+"</small>":"")+"</span>");
+      b.setAttribute("aria-pressed",current===v?"true":"false");
+      b.addEventListener("click",()=>on(v));
+      o.append(b);
+    });
+    w.append(o); flow.append(w);
+  }
+  const arrow=lit=>flow.append(el("div","connector"+(lit?" lit":"")));
+
+  function miniCurve(shape){
+    return '<svg viewBox="0 0 60 52" width="100%" height="58" fill="none" aria-hidden="true">'+
+      '<path d="'+shape+' L60 46 L0 46 Z" fill="rgba(255,255,255,.14)"/>'+
+      '<path d="'+shape+'" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>'+
+      '<path d="M0 46 H60" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/></svg>';
+  }
+
+  function render(){
+    flow.textContent="";
+    row(1,"What did you measure?",[
+      ["number","A number","minutes, dollars, a rating","number"],
+      ["counts","Counts in categories","how many fell in each group","counts"]],
+      q1,v=>{q1=v;q2=null;q3=null;render();});
+    if(q1){
+      arrow(true);
+      if(q1==="number") row(2,"How was the data collected?",[
+        ["one","One group vs a target","is the average different from 10?","one"],
+        ["two","Two separate groups","phone against chat","two"],
+        ["paired","The same units, twice","before and after, agent by agent","paired"],
+        ["many","Three or more groups","email, chat and phone","many"]],
+        q2,v=>{q2=v;q3=null;render();});
+      else row(2,"Compared against what?",[
+        ["shares","Shares you expected","an even week, or a staffing plan","shares"],
+        ["table","Another categorical variable","does resolution depend on channel?","table"]],
+        q2,v=>{q2=v;q3=null;render();});
+    }
+    if(q1==="number"&&q2&&q2!=="many"){
+      arrow(true);
+      const opts=[["sym","Roughly symmetric","no extreme values","sym"],
+                  ["skew","Skewed, or n under 20","one value could drag the mean","skew"]];
+      if(q2==="one") opts.push(["known","Symmetric, σ known","rare in practice","known"]);
+      row(3,"What shape is the data?",opts,q3,v=>{q3=v;render();});
+    }
+    const k=result();
+    res.textContent="";
+    if(!k){
+      res.append(el("div","empty","Answer the questions above and your test appears here."));
+    } else {
+      const t=TESTS[k], card=el("div","result");
+      const left=el("div");
+      left.append(el("div","tag","Your test"));
+      left.append(el("div","rname",t.name));
+      left.append(el("div","rwhen",t.when));
+      left.append(el("div","rcode",t.code));
+      left.append(el("div","rmeta","<span>Reads from <b>"+t.curve+"</b></span>"+
+        (t.pair?"<span>Partner test: <b>"+t.pair+"</b></span>":"")+
+        "<span>e.g. "+t.ex+"</span>"));
+      const right=el("div","curvecard");
+      right.append(el("div","lbl","Reference curve"));
+      right.insertAdjacentHTML("beforeend",miniCurve(t.curveShape));
+      card.append(left,right); res.append(card);
+    }
+  }
+  render();
+ }
+});
+</script>
+
+<script>
+/* ============================================================ 4. practice */
+MODULES.push({
+ name:"Practice",
+ title:"Twelve questions",
+ lede:"Pick an answer and the page tells you straight away whether it holds up, and why.",
+ build(host){
+  const Q=[
+   {q:"Thirty agents each had their handle time measured before and after a new tool. Which test?",
+    o:["Independent t-test","Paired t-test","ANOVA","Chi-square independence"],a:1,
+    why:"The same thirty people appear twice, so the rows pair up one to one. Pairing removes the differences between agents and leaves each agent's own change."},
+   {q:"A sample of 40 invoices has a mean of $1,430 and a median of $780. You want to test the centre against a target. Which test fits best?",
+    o:["One-sample t-test","Wilcoxon signed-rank","Chi-square goodness of fit","Paired t-test"],a:1,
+    why:"Mean far above median means a long right tail. The signed-rank test asks the same question about the centre without assuming a symmetric curve."},
+   {q:"What does a p-value of 0.03 mean?",
+    o:["There is a 3 percent chance H0 is true",
+       "If H0 were true, data at least this extreme would turn up 3 percent of the time",
+       "The effect is small but real","97 percent of the data supports H1"],a:1,
+    why:"A p-value is computed in a world where H0 holds. It is never the probability that H0 is true."},
+   {q:"You run a test, get p = 0.07, and then change alpha from 0.05 to 0.10. What have you done?",
+    o:["Used a more sensitive test","Corrected for multiple comparisons",
+       "Abandoned the error rate you promised","Increased the sample size"],a:2,
+    why:"Alpha is a promise made before the data about how often you will cry wolf. Moving it after seeing p means the number no longer describes anything."},
+   {q:"A chi-square test of independence on a 3 by 2 table has how many degrees of freedom?",
+    o:["6","5","2","1"],a:2,
+    why:"(rows − 1) × (columns − 1) = 2 × 1 = 2. The row and column totals are fixed, so only two cells are free to vary."},
+   {q:"Your ANOVA gives p = 0.002 across three channels. What can you report?",
+    o:["All three channels differ from each other",
+       "At least one channel differs; pairwise tests are needed to say which",
+       "The largest and smallest differ, nothing more","Nothing — ANOVA cannot be used on three groups"],a:1,
+    why:"F compares the spread between group means with the spread inside the groups, for the whole set at once. Which pairs differ needs follow-up tests with a correction."},
+   {q:"A study with 20 observations fails to reject H0. A colleague says this proves there is no effect. What is wrong?",
+    o:["Nothing, that is what a non-significant result means","The test should have been one-sided",
+       "With n = 20 the study may have had too little power to find a real effect",
+       "They should have used alpha = 0.10"],a:2,
+    why:"Failing to find something is not finding nothing. At a small effect size, n = 20 misses a real difference most of the time."},
+   {q:"In a chi-square goodness of fit test, one expected count comes out as 2.4. What should you do?",
+    o:["Report the p-value as normal","Use the observed count instead",
+       "Combine categories, or use an exact test — the chi-square curve is not a fair reference here",
+       "Drop that category from the table"],a:2,
+    why:"The approximation needs every expected count at or above about 5. Dropping the category changes the question; combining categories does not."},
+   {q:"Resolution times are right-skewed. A t-test and Mann-Whitney disagree. Which do you report?",
+    o:["The t-test, because it uses the actual values",
+       "Mann-Whitney, because the data breaks the t-test's assumption",
+       "Whichever gives the smaller p-value","Neither — collect more data first"],a:1,
+    why:"You choose the test from the design and the shape before seeing either answer. Picking by p-value afterwards is p-hacking."},
+   {q:"Quadrupling the sample size does what to the standard error of the mean?",
+    o:["Halves it","Quarters it","Doubles it","Leaves it unchanged"],a:0,
+    why:"The standard error is σ ÷ √n. Four times the data gives twice the square root, so half the standard error."},
+   {q:"You run 20 independent tests on data where nothing is going on, at alpha = 0.05. How many significant results should you expect?",
+    o:["None","About one","About five","It depends on the sample size"],a:1,
+    why:"Under H0 a p-value is equally likely anywhere between 0 and 1, so one in twenty falls below 0.05 by construction."},
+   {q:"The sampling distribution of the sample mean is the distribution of what?",
+    o:["The values in your sample","The values in the population",
+       "The mean you would get from every possible sample of that size","The errors in your measurements"],a:2,
+    why:"It is a distribution of a statistic, not of data. You only ever see one sample from it, and a test judges that one against the whole pile."}
+  ];
+  let i=0,picked=null,score=0,answered=new Array(Q.length).fill(null);
+
+  const lab=el("div","lab");
+  const head=el("div","qhead");
+  const dots=el("div","dots"); head.append(dots);
+  const tally=el("div"); tally.style.cssText="margin-left:auto;font-size:13px;font-weight:700;color:var(--ink-2)";
+  head.append(tally); lab.append(head);
+  const body=el("div","qbody"); lab.append(body);
+  const nav=el("div","btnrow"); nav.style.cssText="padding:14px 18px 18px";
+  lab.append(nav); host.append(lab);
+
+  function render(){
+    dots.textContent="";
+    answered.forEach((a,k)=>{
+      const d=el("i",(k===i?"now ":"")+(a===true?"ok":a===false?"no":""));
+      dots.append(d);
+    });
+    const done=answered.filter(a=>a!==null).length;
+    tally.textContent=score+" / "+done+" correct";
+    body.textContent="";
+    const q=Q[i];
+    body.append(el("p","qstem","<b>"+(i+1)+".</b> "+q.q));
+    q.o.forEach((opt,k)=>{
+      const cls="b qopt"+(picked!=null ? (k===q.a?" right":k===picked?" wrong":"") : "");
+      const b=el("button",cls,'<span class="ltr">'+String.fromCharCode(65+k)+'</span><span>'+opt+'</span>');
+      if(picked!=null) b.disabled=true;
+      else b.addEventListener("click",()=>{
+        picked=k;
+        if(answered[i]===null){answered[i]=(k===q.a); if(k===q.a)score++;}
+        render();
+      });
+      body.append(b);
+    });
+    if(picked!=null){
+      const w=el("div","why");
+      w.append(el("span","pill "+(picked===q.a?"ok":"no"),picked===q.a?"CORRECT":"NOT QUITE"));
+      w.append(el("p",null,q.why));
+      body.append(w);
+    }
+    nav.textContent="";
+    const prev=el("button","b","← Previous"); prev.disabled=(i===0);
+    prev.addEventListener("click",()=>{i--;picked=null;render();});
+    const next=el("button","b"+(picked!=null?" on":""),
+      i===Q.length-1?"Back to the first":"Next question →");
+    next.addEventListener("click",()=>{i=(i+1)%Q.length;picked=null;render();});
+    const again=el("button","b","Start over");
+    again.addEventListener("click",()=>{i=0;picked=null;score=0;
+      answered=new Array(Q.length).fill(null);render();});
+    nav.append(prev,next,again);
+  }
+  render();
+ }
+});
+</script>
+
+<script>
+/* ============================================================ shell */
+(function(){
+  const nav=document.getElementById("nav"), stage=document.getElementById("stage");
+  let cur=-1;
+  const btns=MODULES.map((m,i)=>{
+    const b=el("button"); b.append(el("span",null,m.name));
+    b.addEventListener("click",()=>show(i)); nav.append(b); return b;
+  });
+  function show(i){
+    if(i===cur) return;
+    cur=i; btns.forEach((b,j)=>b.setAttribute("aria-current",j===i?"true":"false"));
+    stage.textContent="";
+    const m=MODULES[i];
+    stage.append(el("p","eyebrow","Stage "+(i+1)+" of "+MODULES.length+" · "+m.name));
+    stage.append(el("h2",null,m.title));
+    stage.append(el("p","lede",m.lede));
+    try{ m.build(stage); }
+    catch(e){ console.error(e); stage.append(el("p","lede","This stage failed to draw: "+e.message)); }
+    window.scrollTo({top:0,behavior:"instant"});
+    if(location.hash.slice(1)!==String(i+1)) history.replaceState(null,"","#"+(i+1));
+  }
+  const h=parseInt(location.hash.slice(1),10);
+  show(Number.isFinite(h)&&h>=1&&h<=MODULES.length?h-1:0);
+})();
+</script>
+
+</body></html>
