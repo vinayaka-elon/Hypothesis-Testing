@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="An interactive lab for teaching hypothesis testing: sampling distributions, a live one-sample t-test, Type I and II errors, a test-picking flow chart and practice questions.">
+<meta name="description" content="An interactive lab for teaching simple linear regression: sampling distributions, a live one-sample t-test, Type I and II errors, a test-picking flow chart, practice questions and a short resource list.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<title>Hypothesis Testing Lab</title>
+<title>Simple Regression Lab</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Commissioner:wght@300;400;500;600;700;800&display=swap">
 <style>
@@ -257,9 +257,57 @@ code{font-family:var(--mono);font-size:.88em;background:var(--fill);padding:.12e
   width:180px;max-width:100%}
 .result .curvecard .lbl{font-size:var(--fs-8);letter-spacing:.1em;text-transform:uppercase;
   color:rgba(255,255,255,.65);font-weight:700;margin-bottom:7px;text-align:center}
+.testdetail{padding:18px 20px 20px;border-top:1px solid var(--sep-2);background:var(--bg-2)}
+.statline{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;background:var(--card);
+  border:1px solid var(--sep-2);border-radius:var(--r-sm);padding:12px 15px;margin-bottom:12px}
+.statline .k{font-size:var(--fs-8);letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);
+  font-weight:700;flex:none}
+.statline .f{font-size:var(--fs-4);font-weight:600;letter-spacing:-.01em;min-width:0}
+.twocol{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:720px){ .twocol{grid-template-columns:1fr} }
+.dcard{background:var(--card);border:1px solid var(--sep-2);border-radius:var(--r-sm);padding:14px 16px;
+  min-width:0}
+.dcard h4{margin:0 0 6px;font-size:var(--fs-8);letter-spacing:.09em;text-transform:uppercase;
+  color:var(--maroon);font-weight:700}
+.dcard p{margin:0;font-size:var(--fs-6);color:var(--text-2);line-height:1.55}
+.dcard p b{color:var(--text);font-weight:700}
+ol.steps{margin:0;padding-left:19px}
+ol.steps li{font-size:var(--fs-6);color:var(--text-2);line-height:1.5;margin-bottom:5px}
+ol.steps li::marker{color:var(--gold-2);font-weight:700}
+ol.steps code,.outrow code{font-family:var(--mono);font-size:var(--fs-7);background:var(--fill);
+  padding:.1em .34em;border-radius:5px;color:var(--text)}
+.dcard .assume{margin-top:9px;padding-top:9px;border-top:1px solid var(--sep-2);
+  font-size:var(--fs-7);color:var(--text-3)}
+.dcard .assume b{color:var(--text-2)}
+.outlist{display:grid;gap:8px}
+.outrow{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:baseline}
+.outrow code{white-space:nowrap;color:var(--maroon);font-weight:500;background:var(--maroon-tint,var(--fill))}
+.outrow span{font-size:var(--fs-6);color:var(--text-2);line-height:1.5}
+.outrow span b{color:var(--text)}
+.sayit{margin:12px 0 0;background:var(--card);border:1px solid var(--sep-2);border-radius:var(--r-sm);
+  padding:12px 15px;font-size:var(--fs-6);color:var(--text-2);line-height:1.5}
+.sayit b{color:var(--maroon);font-weight:700}
 .empty{padding:28px 20px;color:var(--text-3);font-size:var(--fs-6);text-align:center;
   border-top:1px solid var(--sep-2);background:var(--bg-2)}
 
+/* ---------- resource lists ---------- */
+.reslist{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:10px;
+  padding:16px 18px 20px}
+.rescard{display:grid;gap:3px;background:var(--fill);border:1px solid transparent;
+  border-radius:var(--r-sm);padding:14px 16px;text-decoration:none;color:inherit;min-width:0;
+  transition:all .18s var(--ease)}
+.rescard:hover{background:var(--card);border-color:var(--maroon);box-shadow:var(--shadow)}
+.rsrc{font-size:var(--fs-8);letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);
+  font-weight:700}
+.rttl{font-size:var(--fs-5);font-weight:600;letter-spacing:-.01em;line-height:1.3}
+.rescard:hover .rttl{color:var(--maroon)}
+.rnote{font-size:var(--fs-7);color:var(--text-2);line-height:1.5;margin-top:2px}
+.rgo{font-size:var(--fs-8);font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--maroon);margin-top:6px}
+.restail{padding:16px 18px 20px}
+.restail p{margin:0 0 10px;font-size:var(--fs-6);color:var(--text-2);line-height:1.6;max-width:78ch}
+.restail p:last-child{margin-bottom:0}
+.restail b{color:var(--text)} .restail a{color:var(--maroon);font-weight:600}
 .tblwrap{overflow-x:auto;border-top:1px solid var(--sep-2)}
 .tbl{width:100%;border-collapse:collapse;font-size:var(--fs-6)}
 .tbl th{font-size:var(--fs-8);letter-spacing:.07em;text-transform:uppercase;color:var(--text-3);
@@ -302,18 +350,26 @@ code{font-family:var(--mono);font-size:.88em;background:var(--fill);padding:.12e
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 <style>
-/* the few base rules the artifact host used to supply */
 :root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px)}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 img{max-width:100%}
 [hidden]:not([hidden=until-found i]){display:none!important}
+
+/* code block for the hypotheses stage */
+.codebox{font-family:var(--mono);font-size:var(--fs-code);background:var(--fill);
+  border:1px solid var(--sep-2);border-radius:var(--r-sm);padding:13px 15px;overflow-x:auto;
+  white-space:pre;color:var(--text);line-height:1.65;margin:0}
+.codebox .arg{background:color-mix(in srgb,var(--maroon) 18%,transparent);color:var(--maroon);
+  border-radius:5px;padding:.1em .3em;font-weight:700}
+.codebox .cmt{color:var(--text-3)}
+.qopt:disabled{cursor:default}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header class="mast">
-    <h1>Hypothesis Testing Lab</h1>
+    <h1>Simple Regression Lab</h1>
   </header>
   <div class="segwrap"><div class="segmented" id="nav"></div></div>
   <main id="stage"></main>
@@ -541,177 +597,7 @@ const MODULES=[];
 </script>
 
 <script>
-/* ============================================================ 1. sampling distributions */
-MODULES.push({
- name:"Sampling distribution",
- title:"Draw one sample. Then draw a thousand.",
- lede:"Pick a population, take a sample of size n, compute a statistic. Do it again and the "+
-      "statistic comes out different. <b>The pile those repeats make is the sampling "+
-      "distribution</b>, and every p-value is read off it.",
- build(host){
-  let shape="skew", n=10, stat="mean", showCurve=true;
-  let pop=[], last=[], draws=[], seed=1, dropK=1, sampleK=1, lastStat=null;
-
-  function buildPop(){
-    const r=rng(20260420), out=[];
-    for(let i=0;i<5000;i++){
-      if(shape==="normal")       out.push(50+10*gauss(r));
-      else if(shape==="uniform") out.push(20+60*r());
-      else if(shape==="skew")    out.push(20+Math.exp(1.0+0.58*gauss(r))*6);
-      else                       out.push(r()<0.5 ? 32+6*gauss(r) : 68+6*gauss(r));
-    }
-    pop=out;
-  }
-  const statOf=s=> stat==="mean"?mean(s) : stat==="sd"?sdS(s) : quant(s,0.5);
-  const statName=()=> stat==="mean"?"sample mean" : stat==="sd"?"sample sd" : "sample median";
-  const statSym=()=> stat==="mean"?"mean" : stat==="sd"?"s" : "median";
-  const lo=()=>Math.min(...pop), hi=()=>Math.max(...pop);
-
-  function drawSample(){ const r=rng(seed++), s=[];
-    for(let i=0;i<n;i++) s.push(pop[Math.floor(r()*pop.length)%pop.length]); return s; }
-  function take(k){
-    for(let i=0;i<k;i++){ last=drawSample(); lastStat=statOf(last); draws.push(lastStat); }
-    paint();
-    sampleK=0; dropK=0;
-    tween(k>1?400:580,t=>{ sampleK=t; dropK=t; cv2.render(); cv3.render(); });
-  }
-
-  /* ---------- 1 - population ---------- */
-  const lab1=el("div","lab"); sect(lab1,1,"The population");
-  const p1=panel(lab1);
-  const cv1=makeCanvas(p1.fig,0.30,(c,W,H)=>{
-    const L=lo(),Hh=hi(),bins=46,wd=(Hh-L)/bins,cnt=new Array(bins).fill(0);
-    pop.forEach(v=>cnt[clamp(Math.floor((v-L)/wd),0,bins-1)]++);
-    const dens=cnt.map(x=>x/(pop.length*wd));
-    const fr=frame(c,W,H,[14,14,30,38],[L,Hh],[0,Math.max(...dens)*1.18]);
-    fr.grid(5,0,x=>x.toFixed(0),null);
-    fr.clipIn(()=>{ for(let i=0;i<bins;i++){ if(!dens[i])continue;
-      const x0=fr.X(L+i*wd),x1=fr.X(L+(i+1)*wd),yT=fr.Y(dens[i]);
-      roundBar(c,x0+1,yT,Math.max(1.5,x1-x0-2),fr.Y(0)-yT,3,tint("--curve",0.30),null); }});
-    fr.vline(mean(pop),css("--curve"),2,[6,4]);
-    fr.tag(mean(pop),"\u03bc = "+fmt(mean(pop),1),css("--curve"),0);
-  });
-  picker(p1.side,{label:"Population distribution is",value:"skew",options:[
-    ["normal","Normal"],["uniform","Uniform"],["skew","Skewed"],["bimodal","Bimodal"]],
-    on:v=>{shape=v;draws=[];last=[];lastStat=null;paint();}});
-  const ro1=sideStats(p1.side,[["mu","population mean \u03bc","curve"],
-    ["sg","population sd \u03c3","curve"]]);
-  host.append(lab1);
-
-  /* ---------- 2 - one sample ---------- */
-  const lab2=el("div","lab"); sect(lab2,2,"One random sample of size n");
-  const p2=panel(lab2);
-  const cv2=makeCanvas(p2.fig,0.21,(c,W,H)=>{
-    const fr=frame(c,W,H,[14,14,30,38],[lo(),hi()],[0,1]);
-    fr.grid(5,0,x=>x.toFixed(0),null);
-    if(!last.length){
-      c.fillStyle=css("--text-3"); c.font='13px "Commissioner",sans-serif';
-      c.textAlign="center"; c.textBaseline="middle";
-      c.fillText("Draw a sample \u2192",(fr.L+fr.R)/2,(fr.T+fr.B)/2); return;
-    }
-    fr.clipIn(()=>{
-      const used={};
-      last.forEach((v,i)=>{
-        const show=clamp(sampleK*last.length-i,0,1); if(show<=0) return;
-        const x=Math.round(fr.X(v)); used[x]=(used[x]||0)+1;
-        const y=fr.B-8-(used[x]-1)*8;
-        c.globalAlpha=show;
-        c.beginPath(); c.arc(x,y-(1-show)*22,4.2*(0.5+0.5*show),0,7);
-        c.fillStyle=tint("--samp",0.55); c.fill();
-        c.strokeStyle=css("--samp"); c.lineWidth=1.3; c.stroke();
-        c.globalAlpha=1;
-      });
-    });
-    const m=statOf(last);
-    if(stat!=="sd"){ fr.vline(m,css("--sim"),2.4); fr.tag(m,statSym()+" = "+fmt(m,1),css("--sim"),0); }
-  });
-  slider(p2.side,{label:"Sample size n",min:2,max:100,step:1,value:10,
-    on:v=>{n=v;draws=[];last=[];lastStat=null;paint();}});
-  const ro2=sideStats(p2.side,[["sm","this sample's statistic","sim"],
-    ["sx","its mean","samp"],["ss","its sd","samp"]]);
-  host.append(lab2);
-
-  /* ---------- 3 - the sampling distribution ---------- */
-  const lab3=el("div","lab"); sect(lab3,3,"Approximate sampling distribution");
-  const p3=panel(lab3);
-  let lastFrame=null;
-  const cv3=makeCanvas(p3.fig,0.36,(c,W,H)=>{
-    if(!draws.length){
-      const fr=frame(c,W,H,[14,14,32,38],[0,1],[0,1]); fr.grid(4,3,null,null);
-      c.fillStyle=css("--text-3"); c.font='13px "Commissioner",sans-serif';
-      c.textAlign="center"; c.textBaseline="middle";
-      c.fillText("Their "+statName()+"s pile up here.",(fr.L+fr.R)/2,(fr.T+fr.B)/2);
-      lastFrame=null; return;
-    }
-    const m=mean(draws), s=(draws.length>1?sdS(draws):1)||1;
-    const a=Math.min(...draws), b=Math.max(...draws);
-    const pad=(b-a)*0.14+s*0.5, L=a-pad, Hh=b+pad;
-    const probe=frame(c,W,H,[14,14,32,38],[L,Hh],[0,1]);
-    const peak=probe.hist(draws,L,Hh,30,"rgba(0,0,0,0)",null).peak;
-    const top=Math.max(peak,showCurve?normPdf(0)/s:0)*1.22||1;
-    const fr=frame(c,W,H,[14,14,32,38],[L,Hh],[0,top]);
-    fr.grid(5,3,x=>x.toFixed(1),null);
-    const info=fr.hist(draws,L,Hh,30,tint("--sim",0.42),css("--sim"));
-    if(showCurve) fr.clipIn(()=>{
-      fr.fade(curvePts(x=>normPdf((x-m)/s)/s,L,Hh,220),tint("--curve",0.16),tint("--curve",0.02));
-      fr.line(curvePts(x=>normPdf((x-m)/s)/s,L,Hh,220),css("--curve"),2.4);
-    });
-    fr.vline(m,css("--sim"),1.8,[6,4]);
-    if(lastStat!=null && dropK<1){
-      const x=fr.X(lastStat), y=fr.T+(fr.B-fr.T)*dropK;
-      c.globalAlpha=1-dropK*0.2;
-      c.beginPath(); c.arc(x,y,6.5,0,7); c.fillStyle=css("--samp"); c.fill();
-      c.strokeStyle=css("--card"); c.lineWidth=2; c.stroke(); c.globalAlpha=1;
-    }
-    lastFrame={fr,L,Hh,info};
-  },(mx,my,place)=>{
-    if(!lastFrame) return place(null);
-    const {fr,L,Hh,info}=lastFrame;
-    if(mx<fr.L||mx>fr.R||my<fr.T||my>fr.B) return place(null);
-    const v=L+(mx-fr.L)/(fr.R-fr.L)*(Hh-L);
-    const i=clamp(Math.floor((v-L)/info.width),0,info.counts.length-1);
-    place(mx,my,"<b>"+info.counts[i]+"</b> of "+draws.length+" samples<br>"+
-      fmt(L+i*info.width,2)+" to "+fmt(L+(i+1)*info.width,2));
-  });
-  picker(p3.side,{label:"Sampling distribution of",value:"mean",options:[
-    ["mean","the sample mean"],["sd","the sample standard deviation"],["median","the sample median"]],
-    on:v=>{stat=v;draws=[];lastStat=null;paint();}});
-  const drawBox=el("div","ctrl");
-  drawBox.append(el("label",null,"<span>Draw random samples</span>"));
-  const row=el("div","btnrow"); row.style.marginTop="8px";
-  [["1",()=>take(1)],["10",()=>take(10)],["100",()=>take(100)],["1,000",()=>take(1000)],
-   ["Reset",()=>{draws=[];last=[];lastStat=null;seed=1;paint();}]]
-   .forEach(([t,fn])=>{ const b=el("button","b"+(t==="1,000"?" big":""),t);
-     b.addEventListener("click",fn); row.append(b); });
-  drawBox.append(row); p3.side.append(drawBox);
-  const ro3=sideStats(p3.side,[["k","samples","sim"],["dm","centre","sim"],
-    ["ds","spread","sim"],["pr","\u03c3/\u221an","curve"]],true);
-  const curveBtn=el("button","b on","Normal curve");
-  curveBtn.style.marginTop="2px";
-  curveBtn.addEventListener("click",()=>{showCurve=!showCurve;
-    curveBtn.classList.toggle("on",showCurve); cv3.render();});
-  p3.side.append(curveBtn);
-  host.append(lab3);
-
-  function paint(){
-    buildPop(); cv1.render(); cv2.render(); cv3.render();
-    ro1.mu.textContent=fmt(mean(pop),2);
-    ro1.sg.textContent=fmt(sdP(pop),2);
-    ro2.sm.textContent=last.length?fmt(statOf(last),2):"\u2014";
-    ro2.sx.textContent=last.length?fmt(mean(last),2):"\u2014";
-    ro2.ss.textContent=last.length?fmt(sdS(last),2):"\u2014";
-    ro3.k.textContent=draws.length.toLocaleString();
-    ro3.dm.textContent=draws.length?fmt(mean(draws),2):"\u2014";
-    ro3.ds.textContent=draws.length>1?fmt(sdS(draws),3):"\u2014";
-    ro3.pr.textContent=stat==="mean"?fmt(sdP(pop)/Math.sqrt(n),3):"\u2014";
-  }
-  paint();
- }
-});
-</script>
-
-<script>
-/* ============================================================ 2. one-sample t-test */
+/* ============================================================ t distribution */
 /* Student's t, written out here because this stage is the only one that needs it */
 function betacf(a,b,x){
   const FP=1e-300,EPS=1e-15; let qab=a+b,qap=a+1,qam=a-1,c=1,d=1-qab*x/qap;
@@ -734,642 +620,340 @@ const tPdf=(t,v)=>Math.exp(lgamma((v+1)/2)-lgamma(v/2))/Math.sqrt(v*Math.PI)*Mat
 function tCdf(t,v){ const p=0.5*betaI(v/2,0.5,v/(v+t*t)); return t>0?1-p:p; }
 const tCrit=(p,v)=>invert(x=>tCdf(x,v),p,-60,60);
 
-MODULES.push({
- name:"One-sample t-test",
- title:"One sample, one claim, one decision",
- lede:"A population sits out there with a mean you cannot see. You take one sample and you have a "+
-      "claim about that unseen mean. Move the value you are testing against and watch everything "+
-      "else follow — the statistic, the rejection region, the p-value and the verdict are one "+
-      "calculation seen from four sides.",
- build(host){
-  let mu=52, sigma=10, n=25, mu0=50, tail="two", alpha=0.05, seed=7;
-  let z=[];
-  const redraw=()=>{const r=rng(seed); z=Array.from({length:200},()=>gauss(r));};
-  redraw();
-  const samp=()=>z.slice(0,n).map(v=>mu+sigma*v);
-  function stats(){
-    const x=samp(), xb=mean(x), s=sdS(x), df=n-1, se=s/Math.sqrt(n);
-    const t=(xb-mu0)/se;
-    const p = tail==="two" ? 2*(1-tCdf(Math.abs(t),df))
-            : tail==="gt"  ? 1-tCdf(t,df) : tCdf(t,df);
-    const tc = tail==="two" ? tCrit(1-alpha/2,df) : tCrit(1-alpha,df);
-    const half= tCrit(1-alpha/2,df)*se;
-    return {x,xb,s,df,se,t,p,tc,half,lo:xb-half,hi:xb+half,rej:p<alpha};
-  }
-  /* one label style for every flag drawn on a chart */
-  function flag(c,fr,x,text,colour,row){
-    c.font='700 11.5px "Commissioner",sans-serif';
-    const w=c.measureText(text).width;
-    const px=clamp(fr.X(x),fr.L+w/2+6,fr.R-w/2-6), py=fr.T+2+row*17;
-    c.strokeStyle=colour; c.lineWidth=1; c.setLineDash([2,3]);
-    c.beginPath(); c.moveTo(fr.X(x),py+13); c.lineTo(fr.X(x),fr.B); c.stroke(); c.setLineDash([]);
-    c.fillStyle=css("--card"); c.globalAlpha=.92;
-    c.fillRect(px-w/2-6,py-2,w+12,16); c.globalAlpha=1;
-    c.fillStyle=colour; c.textAlign="center"; c.textBaseline="top"; c.fillText(text,px,py);
-  }
+</script>
 
-  /* ================= 1. population and sample ================= */
+<script>
+/* ============================================================ 2c. simple linear regression */
+MODULES.push({
+ name:"Simple regression",
+ title:"One line, and how wrong it is",
+ lede:"A straight line through a cloud of points. <b>The slope is the claim, R² is how much "+
+      "of the variation it accounts for, and the standard error of the estimate is how far off "+
+      "a typical prediction lands.</b> Three different questions, and students mix them up "+
+      "constantly.",
+ build(host){
+  const D={nurse_hours_ppd:[8.6,6.37,6.16,8.24,7.9,6.56,8.71,7.36,9.91,8.76,8.44,9.72,10.12,8.6,9.36,7.14,8.99,7.03,6.76,8.64,5.27,7.26,7.33,6.43,9.02,7.88,7.4,9.08,9.61,4.79,7.69,7.08,7.69,6.8,8.37,6.01,7.69,10.76,5.0,7.66,7.6,8.15,8.85,7.18,6.81,9.57,6.67,5.5,8.72,8.03,10.02,10.37,7.68,6.54,7.76,6.92,7.86,7.32,8.09,8.46,10.22,7.59,8.86,9.35,11.28,7.72,10.28,9.5,9.61,6.5,7.5,8.0,8.43,10.24,9.35,6.76,8.68,8.17,8.73,8.11,11.14,6.09,6.02,8.25,7.07,7.81,9.11,10.3,8.39,8.28,8.08,8.57,10.09,6.67,9.76,8.12,6.65,8.49,9.75,7.65,10.19,8.47,8.13,10.38,7.64,6.44,10.29,7.38,9.42,7.55,6.61,5.2,5.82,7.88,7.75,6.59,5.16,9.52,7.31,7.79],case_mix_index:[1.54,1.52,1.23,1.27,1.25,1.29,1.26,1.26,1.82,1.54,1.41,1.46,1.19,1.25,1.75,1.4,1.14,1.42,1.55,1.5,1.04,1.48,1.35,1.29,1.4,1.47,1.39,1.53,1.39,0.99,1.02,1.43,1.44,1.62,1.66,1.56,1.45,1.5,1.17,1.49,1.64,1.27,1.18,1.43,1.42,1.2,1.18,1.49,0.92,1.09,1.3,1.69,1.18,1.41,1.11,1.52,1.27,1.58,1.31,0.92,1.62,1.31,1.23,1.59,1.54,1.23,1.5,1.41,1.54,1.33,1.28,1.32,1.23,1.26,1.29,1.32,1.52,1.41,1.52,0.99,1.3,1.65,1.06,1.33,1.04,1.38,1.66,1.1,1.39,1.59,1.31,1.37,1.31,1.2,1.32,1.18,1.11,1.27,1.5,1.0,1.52,1.52,0.94,1.57,1.52,1.12,1.45,1.25,1.45,1.67,1.41,1.2,1.41,1.44,1.41,1.23,0.95,1.28,1.44,1.19],beds:[120.0,52.0,100.0,78.0,96.0,142.0,95.0,63.0,128.0,110.0,163.0,36.0,620.0,123.0,53.0,109.0,125.0,361.0,104.0,81.0,128.0,96.0,82.0,64.0,112.0,52.0,251.0,174.0,213.0,137.0,343.0,118.0,52.0,88.0,128.0,109.0,114.0,107.0,62.0,55.0,91.0,25.0,124.0,66.0,109.0,84.0,150.0,45.0,238.0,68.0,67.0,78.0,393.0,65.0,85.0,83.0,141.0,127.0,28.0,87.0,109.0,93.0,54.0,435.0,201.0,124.0,123.0,131.0,227.0,125.0,71.0,45.0,98.0,197.0,213.0,141.0,106.0,160.0,197.0,67.0,87.0,67.0,57.0,112.0,92.0,127.0,234.0,85.0,78.0,91.0,182.0,86.0,82.0,84.0,93.0,106.0,428.0,110.0,130.0,82.0,81.0,97.0,160.0,620.0,493.0,268.0,144.0,206.0,159.0,66.0,457.0,268.0,68.0,109.0,145.0,74.0,124.0,64.0,97.0,34.0],readmit_rate_pct:[13.74,16.61,16.38,14.09,12.5,13.46,12.92,11.69,12.92,12.18,10.95,11.98,12.56,12.83,13.66,12.48,12.07,14.77,14.98,13.77,13.26,15.58,15.51,17.09,11.93,13.24,11.72,13.02,11.16,12.16,11.92,11.51,13.26,17.3,13.12,12.92,11.57,8.93,17.8,13.15,13.59,11.84,10.44,14.56,16.51,13.25,11.75,17.23,13.08,13.68,11.15,11.2,14.5,17.44,12.94,14.52,14.27,13.91,14.16,11.99,12.14,15.89,11.79,14.94,8.1,12.05,11.01,13.23,14.3,12.7,14.27,12.41,9.46,7.71,9.66,13.38,11.14,12.77,13.6,10.3,9.03,13.65,14.94,12.44,12.12,12.72,11.84,10.45,11.42,13.35,13.31,10.67,11.51,16.35,10.41,13.48,14.94,13.42,12.63,15.27,9.82,11.61,13.19,11.37,12.62,14.87,8.79,15.23,9.04,14.96,15.44,15.5,16.01,13.39,11.92,15.13,13.96,11.02,14.41,11.44]};
+  const Y=D.readmit_rate_pct;
+  const XS=[
+   {k:"nurse_hours_ppd", lab:"nurse hours per patient day", unit:"nurse hour per patient day",
+    axis:"nurse hours per patient day", step:"1 more", dp:2},
+   {k:"case_mix_index",  lab:"case mix index", unit:"point of case mix index",
+    axis:"case mix index", step:"1 more", dp:2},
+   {k:"beds",            lab:"staffed beds", unit:"bed",
+    axis:"staffed beds", step:"1 more", dp:0}
+  ];
+  let xi=0, showRes=true, b0u=null, b1u=null;
+
+  const X=()=>D[XS[xi].k];
+  function fit(){
+    const x=X(), y=Y, n=x.length;
+    const mx=mean(x), my=mean(y);
+    let sxy=0,sxx=0;
+    for(let i=0;i<n;i++){ sxy+=(x[i]-mx)*(y[i]-my); sxx+=(x[i]-mx)*(x[i]-mx); }
+    const b1=sxy/sxx, b0=my-b1*mx;
+    let sse=0,sst=0,mae=0;
+    for(let i=0;i<n;i++){ const e=y[i]-(b0+b1*x[i]); sse+=e*e; mae+=Math.abs(e);
+                          sst+=(y[i]-my)*(y[i]-my); }
+    mae/=n;
+    const df=n-2, se_e=Math.sqrt(sse/df), seb1=se_e/Math.sqrt(sxx);
+    const t=b1/seb1, p=2*(1-tCdf(Math.abs(t),df)), tc=tCrit(0.975,df);
+    return {x,y,n,mx,my,b0,b1,sse,sst,ssr:sst-sse,r2:1-sse/sst,r:Math.sign(b1)*Math.sqrt(1-sse/sst),
+            df,se_e,seb1,t,p,lo:b1-tc*seb1,hi:b1+tc*seb1,mae,sxx};
+  }
+  const sseOf=(b0,b1)=>{const x=X(); let s=0;
+    for(let i=0;i<x.length;i++){const e=Y[i]-(b0+b1*x[i]); s+=e*e;} return s;};
+  const pTxt=p=>p<0.0001?"< 0.0001":p.toFixed(4);
+
+  /* ---------------- 1. the line ---------------- */
   const lab1=el("div","lab");
-  sect(lab1,1,"The population you cannot see, and the sample you can");
-  const fig1=el("div","figwrap"); lab1.append(fig1);
-  const cv1=makeCanvas(fig1,w=>Math.max(w*0.34,250),(c,W,H)=>{
-    const S=stats();
-    const lo=Math.min(mu,S.xb)-3.2*sigma, hi=Math.max(mu,S.xb)+3.2*sigma;
-    const fr=frame(c,W,H,[62,18,40,18],[lo,hi],[0,normPdf(0)/sigma*1.18]);
-    fr.grid(6,0,v=>v.toFixed(0),null);
-    fr.axisLabel("the measurement itself");
-    const pop=curvePts(v=>normPdf((v-mu)/sigma)/sigma,lo,hi,320);
+  sect(lab1,1,"The line through the cloud");
+  const pick=el("div","ctrls"); pick.style.borderTop="0"; pick.style.background="transparent";
+  const pc=el("div","ctrl"); pc.style.gridColumn="1/-1";
+  pc.append(el("label",null,"<span>Predict 30-day readmission rate from…</span>"));
+  const prow=el("div","btnrow"); prow.style.marginTop="8px";
+  XS.forEach((s,i)=>{ const b=el("button","b"+(i===0?" on":""),s.lab);
+    b.addEventListener("click",()=>{xi=i;b0u=b1u=null;
+      [...prow.children].forEach((x,j)=>x.classList.toggle("on",j===i)); go();});
+    prow.append(b); });
+  pc.append(prow); pick.append(pc); lab1.append(pick);
+
+  const fig=el("div","figwrap"); lab1.append(fig);
+  const cv=makeCanvas(fig,0.52,(c,W,H)=>{
+    const F=fit(), x=F.x, y=F.y;
+    const xlo=Math.min(...x), xhi=Math.max(...x), ylo=Math.min(...y), yhi=Math.max(...y);
+    const px=(xhi-xlo)*0.06, py=(yhi-ylo)*0.10;
+    const fr=frame(c,W,H,[18,18,44,46],[xlo-px,xhi+px],[ylo-py,yhi+py]);
+    fr.grid(6,4,v=>v.toFixed(XS[xi].dp===0?0:1),v=>v.toFixed(0));
+    fr.axisLabel(XS[xi].axis);
+    c.save(); c.translate(13,(fr.T+fr.B)/2); c.rotate(-Math.PI/2);
+    c.fillStyle=css("--text-2"); c.font='600 11.5px "Commissioner",sans-serif';
+    c.textAlign="center"; c.textBaseline="middle";
+    c.fillText("30-day readmission rate, %",0,0); c.restore();
+
+    const B0=b0u==null?F.b0:b0u, B1=b1u==null?F.b1:b1u;
     fr.clipIn(()=>{
-      fr.fade(pop,tint("--curve",0.26),tint("--curve",0.02));
-      fr.line(pop,css("--curve"),2.6);
-      const r2=rng(seed+991);
-      S.x.forEach(v=>{ const y=fr.B-9-r2()*30;
-        c.beginPath(); c.arc(fr.X(v),y,3.1,0,7); c.fillStyle=tint("--samp",0.75); c.fill(); });
+      if(showRes) for(let i=0;i<x.length;i++){
+        c.beginPath(); c.moveTo(fr.X(x[i]),fr.Y(y[i])); c.lineTo(fr.X(x[i]),fr.Y(B0+B1*x[i]));
+        c.strokeStyle=tint("--warn",0.42); c.lineWidth=1; c.stroke();
+      }
+      for(let i=0;i<x.length;i++){
+        c.beginPath(); c.arc(fr.X(x[i]),fr.Y(y[i]),3.2,0,7);
+        c.fillStyle=tint("--curve",0.55); c.fill();
+        c.strokeStyle=css("--curve"); c.lineWidth=.8; c.stroke();
+      }
+      /* the least-squares line */
+      const a=fr.xd[0], b=fr.xd[1];
+      c.beginPath(); c.moveTo(fr.X(a),fr.Y(F.b0+F.b1*a)); c.lineTo(fr.X(b),fr.Y(F.b0+F.b1*b));
+      c.strokeStyle=css("--sim"); c.lineWidth=(b0u==null?3:1.8);
+      c.setLineDash(b0u==null?[]:[6,5]); c.stroke(); c.setLineDash([]);
+      /* the line the student is dragging, when they have moved it */
+      if(b0u!=null){
+        c.beginPath(); c.moveTo(fr.X(a),fr.Y(B0+B1*a)); c.lineTo(fr.X(b),fr.Y(B0+B1*b));
+        c.strokeStyle=css("--samp"); c.lineWidth=3; c.stroke();
+      }
     });
-    flag(c,fr,S.xb,"x̄ = "+fmt(S.xb,2),css("--samp"),0);
-    flag(c,fr,mu,"true μ = "+fmt(mu,1),css("--curve"),1);
   });
-  legend(lab1,[[css("--curve"),"population"],[tint("--samp",0.85),"your n observations","dot"],
-    [css("--samp"),"sample mean"]]);
-  const r1=readouts(lab1,[["xb","sample mean","samp"],
-    ["s","sample sd","sm"],["se","standard error","sm"],["n","sample size n","sm"],
-    ["mu","true μ (simulation)","curve sm"]]);
+  legend(lab1,[[css("--sim"),"the least-squares line"],
+    [tint("--curve",0.8),"one hospital","box"],
+    [tint("--warn",0.8),"residual · what the line missed by","box"]]);
+
+  const eqn=el("div","statline"); lab1.append(eqn);
   const c1=el("div","ctrls"); lab1.append(c1);
-  slider(c1,{label:"Sample size n",min:5,max:120,step:1,value:25,on:v=>{n=v;go();}});
-  slider(c1,{label:"True population mean μ · simulation only",min:40,max:64,step:0.5,
-    value:52,fmt:v=>v.toFixed(1),on:v=>{mu=v;go();}});
-  slider(c1,{label:"Population sd σ · simulation only",min:4,max:20,step:1,value:10,
-    on:v=>{sigma=v;go();}});
-  const bt=buttons(c1,null,
-    [{t:"Draw a new sample from the same population",big:true,
-      on:()=>{seed=(seed*7919+13)%99991;redraw();go();}}]);
-  bt[0].el.closest(".ctrl").classList.add("wide");
+  const sb0=slider(c1,{label:"Your intercept b₀",min:0,max:30,step:0.1,value:13,
+    fmt:v=>v.toFixed(1),on:v=>{b0u=v; if(b1u==null) b1u=fit().b1; go();}});
+  const sb1=slider(c1,{label:"Your slope b₁",min:-3,max:3,step:0.005,value:0,
+    fmt:v=>v.toFixed(3),on:v=>{b1u=v; if(b0u==null) b0u=fit().b0; go();}});
+  buttons(c1,null,[
+    {t:"Snap to the least-squares line",big:true,on:()=>{b0u=b1u=null;go();}},
+    {t:"Residuals on/off",on:()=>{showRes=!showRes;go();}}]);
+  const sseNote=el("p","labnote"); lab1.append(sseNote);
   host.append(lab1);
 
-  /* ================= 2. the hypotheses ================= */
+  /* ---------------- 2. coefficients ---------------- */
   const lab2=el("div","lab");
-  sect(lab2,2,"State the two hypotheses before you look");
-  const hyp=el("div","hyp");
-  const h0=el("div"), h1=el("div");
-  h0.append(el("div","k","Null hypothesis H₀"));  const h0s=el("div","s"); h0.append(h0s);
-  h1.append(el("div","k","Alternative H₁"));      const h1s=el("div","s"); h1.append(h1s);
-  hyp.append(h0,h1); lab2.append(hyp);
-  const hint=el("p","labnote"); lab2.append(hint);
-  const c2=el("div","ctrls"); lab2.append(c2);
-  const mu0A=slider(c2,{label:"The value you are testing against · μ₀",
-    min:40,max:64,step:0.5,value:50,fmt:v=>v.toFixed(1),on:v=>{mu0=v;mu0B.set(v);go();}});
-  mu0A.input.closest(".ctrl").classList.add("hero");
-  picker(c2,{label:"Direction of H₁",value:"two",on:v=>{tail=v;go();},options:[
-    ["two","Two-sided · μ ≠ μ₀"],
-    ["gt","One-sided · μ > μ₀"],
-    ["lt","One-sided · μ < μ₀"]]});
-  picker(c2,{label:"Significance level α",value:"0.05",on:v=>{alpha=+v;go();},options:[
-    ["0.10","0.10 · lenient"],["0.05","0.05 · the usual choice"],["0.01","0.01 · strict"]]});
+  sect(lab2,2,"What the two coefficients actually say");
+  const two=el("div","twocol"); two.style.padding="16px 18px";
+  const cardB1=el("div","dcard"), cardB0=el("div","dcard");
+  two.append(cardB1,cardB0); lab2.append(two);
   host.append(lab2);
 
-  /* ================= 3. the test ================= */
+  /* ---------------- 3. is the slope real ---------------- */
   const lab3=el("div","lab");
-  sect(lab3,3,"Where your t lands on the t distribution");
-  const fig3=el("div","figwrap"); lab3.append(fig3);
-  const cv3=makeCanvas(fig3,w=>Math.max(w*0.34,250),(c,W,H)=>{
-    const S=stats();
-    const span=Math.max(4.4,Math.abs(S.t)+1.2);
-    const fr=frame(c,W,H,[62,18,40,18],[-span,span],[0,tPdf(0,S.df)*1.2]);
-    fr.grid(6,0,v=>v.toFixed(0),null);
-    fr.axisLabel("t · standard errors between x̄ and μ₀");
-    const pts=curvePts(v=>tPdf(v,S.df),-span,span,340);
-    fr.clipIn(()=>{
-      if(tail!=="lt") fr.area(pts.filter(q=>q[0]>=S.tc),tint("--bad",0.42));
-      if(tail!=="gt") fr.area(pts.filter(q=>q[0]<=-S.tc),tint("--bad",0.42));
-      const a=tail==="two"?Math.abs(S.t):S.t;
-      if(tail!=="lt") fr.area(pts.filter(q=>q[0]>=a),tint("--samp",0.55));
-      if(tail!=="gt") fr.area(pts.filter(q=>q[0]<=(tail==="two"?-Math.abs(S.t):S.t)),tint("--samp",0.55));
-      fr.line(pts,css("--curve"),2.8);
-    });
-    (tail==="two"?[-S.tc,S.tc]:tail==="gt"?[S.tc]:[-S.tc])
-      .forEach(v=>flag(c,fr,v,(v<0?"−":"")+fmt(Math.abs(v),3),css("--bad"),0));
-    flag(c,fr,S.t,"t = "+fmt(S.t,2),css("--samp"),1);
-  });
-  legend(lab3,[[tint("--bad",0.8),"rejection region · area α","box"],
-    [tint("--samp",0.8),"p-value · area past your t","box"],
-    [css("--curve"),"t distribution, df = n − 1"]]);
-  const r3=readouts(lab3,[["t","t statistic","samp"],["p","p-value","samp"],
-    ["tc","critical value","bad sm"],["a","α","sm"],["df","degrees of freedom","sm"],
-    ["ci","confidence interval","sm"]]);
-  const verdict=el("div","verdict"); lab3.append(verdict);
-  const c3=el("div","ctrls"); lab3.append(c3);
-  const mu0B=slider(c3,{label:"The value you are testing against · μ₀",
-    min:40,max:64,step:0.5,value:50,fmt:v=>v.toFixed(1),on:v=>{mu0=v;mu0A.set(v);go();}});
-  mu0B.input.closest(".ctrl").classList.add("hero");
+  sect(lab3,3,"Is that slope more than noise?");
+  const hyp=el("div","hyp");
+  const hA=el("div"), hB=el("div");
+  hA.append(el("div","k","Null hypothesis H₀"));
+  hA.append(el("div","s","β₁ = 0"));
+  hB.append(el("div","k","Alternative H₁"));
+  hB.append(el("div","s","β₁ ≠ 0"));
+  hyp.append(hA,hB); lab3.append(hyp);
+  const ro3=readouts(lab3,[["b1","slope b₁","samp"],["se","SE(b₁)","sm"],
+    ["t","t_stat","sm"],["p","p_val","sm"],["ci","95% CI for β₁","sm"]]);
+  const codeW=el("div"); codeW.style.padding="4px 18px 2px";
+  const codeBox=el("pre","codebox"); codeW.append(codeBox); lab3.append(codeW);
+  const slopeNote=el("p","labnote"); lab3.append(slopeNote);
   host.append(lab3);
 
-  /* ================= 4 and 5. the arithmetic ================= */
+  /* ---------------- 4. fit and error ---------------- */
   const lab4=el("div","lab");
-  sect(lab4,4,"The same three steps, with your numbers in them");
-  const calcA=el("div","calc"); lab4.append(calcA);
-  const calcNote=el("p","labnote"); lab4.append(calcNote);
-  host.append(lab4);
-  const lab5=el("div","lab");
-  sect(lab5,5,"Running it backwards · estimating μ from the same sample");
-  const calcB=el("div","calc"); lab5.append(calcB);
-  const calcNote2=el("p","labnote"); lab5.append(calcNote2);
-  host.append(lab5);
-
-  const R=a=>"<mrow>"+a+"</mrow>";
-  const N=v=>"<mn>"+String(v).split("-").join("−")+"</mn>";
-  const I=v=>'<mi mathvariant="normal">'+v+"</mi>";
-  const O=v=>"<mo>"+v+"</mo>";
-  const FR=(a,b)=>"<mfrac>"+R(a)+R(b)+"</mfrac>";
-  const RT=a=>"<msqrt>"+R(a)+"</msqrt>";
-  const PAR=a=>R(O("(")+a+O(")"));
-  const XB='<mover accent="true"><mi mathvariant="normal">x</mi><mo>&#xaf;</mo></mover>';
-  const MUH='<mover accent="true"><mi mathvariant="normal">&#x3bc;</mi><mo>&#x5e;</mo></mover>';
-  const MU0='<msub><mi mathvariant="normal">&#x3bc;</mi><mn>0</mn></msub>';
-  const SE='<mi mathvariant="normal">SE</mi>';
-  const TSTAR='<msup><mi mathvariant="normal">t</mi><mo>*</mo></msup>';
-  const TDF=d=>'<msub><mi mathvariant="normal">T</mi><mn>'+d+'</mn></msub>';
-  const SP='<mspace width="0.75em"></mspace>';
-  function crow(host,step,title,sym,num,res,tone){
-    if(num==null){ num=res; res=null; }
-    const r=el("div","crow");
-    const h=el("div","chead");
-    h.append(el("span","cstep",step));
-    h.append(el("span","ctitle",title));
-    r.append(h);
-    r.append(el("div","cmath",'<math display="block" class="mml">'+
-      '<mstyle displaystyle="true"><mrow>'+
-        R(sym)+SP+O("=")+SP+
-        (res==null ? '<mstyle class="res '+(tone||"")+'">'+num+'</mstyle>'
-                   : '<mrow class="num">'+num+'</mrow>'+SP+O("=")+SP+
-                     '<mstyle class="res '+(tone||"")+'">'+res+'</mstyle>')+
-      '</mrow></mstyle></math>'));
-    host.append(r);
-  }
-
-  const SYM={two:"≠",gt:">",lt:"<"};
-  function go(){
-    const S=stats(), inside=S.lo<=mu0&&mu0<=S.hi;
-
-    h0s.innerHTML="μ = "+fmt(mu0,1);
-    h1s.innerHTML="μ "+SYM[tail]+" "+fmt(mu0,1);
-    hint.innerHTML = tail==="two"
-      ? "A two-sided test splits α between both tails, so each one holds "+fmt(alpha/2,3)+
-        ". It asks only whether the mean is <b>different</b>; a difference either way counts."
-      : "A one-sided test puts the whole of α = "+fmt(alpha,2)+" in one tail. That makes it "+
-        "easier to reject in that direction and impossible to detect a difference the other way, "+
-        "so the direction must be chosen <b>before</b> seeing the data.";
-
-    r1.xb.textContent=fmt(S.xb,2);
-    r1.s.textContent=fmt(S.s,2);   r1.se.textContent=fmt(S.se,3);
-    r1.n.textContent=n;            r1.mu.textContent=fmt(mu,1);
-
-    r3.t.textContent=fmt(S.t,3);
-    r3.p.textContent=S.p<0.0001?"< 0.0001":fmt(S.p,4);
-    r3.tc.textContent=(tail==="two"?"±":tail==="lt"?"−":"")+fmt(S.tc,3);
-    r3.a.textContent=fmt(alpha,2);
-    r3.df.textContent=S.df;
-    r3.ci.textContent=fmt(S.lo,2)+" to "+fmt(S.hi,2);
-    r3.p.className="v samp";
-
-    verdict.className="verdict "+(S.rej?"rej":"keep");
-    verdict.innerHTML=(S.rej
-      ? "<b>Reject H₀</b><span>p = "+(S.p<0.0001?"< 0.0001":fmt(S.p,4))+
-        " is below α = "+fmt(alpha,2)+", so "+fmt(mu0,1)+" is not a believable value for μ.</span>"
-      : "<b>Do not reject H₀</b><span>p = "+fmt(S.p,4)+" is not below α = "+fmt(alpha,2)+
-        ", so "+fmt(mu0,1)+" stays believable — which is not the same as proving it true.</span>");
-
-    const moe=S.half;
-    calcA.textContent="";
-    crow(calcA,"1","How much does a sample mean of this size wobble?",
-      SE+O("=")+FR(I("s"),RT(I("n"))), FR(N(fmt(S.s,2)),RT(N(n))), N(fmt(S.se,3)),"samp");
-    crow(calcA,"2","How many of those wobbles from the value you are testing?",
-      I("t")+O("=")+FR(XB+O("−")+MU0,FR(I("s"),RT(I("n")))),
-      FR(N(fmt(S.xb,2))+O("−")+N(fmt(mu0,1)),N(fmt(S.se,3))),
-      N(fmt(S.t,3)),"samp");
-    crow(calcA,"3","How often would t be at least this extreme if H₀ were true?",
-      I("p")+O("=")+(tail==="two"
-        ? N(2)+O("⋅")+I("P")+PAR(TDF(S.df)+O(">")+O("|")+I("t")+O("|"))
-        : I("P")+PAR(TDF(S.df)+O(tail==="gt"?">":"<")+I("t"))),
-      (tail==="two"
-        ? N(2)+O("⋅")+I("P")+PAR(TDF(S.df)+O(">")+N(fmt(Math.abs(S.t),3)))
-        : I("P")+PAR(TDF(S.df)+O(tail==="gt"?">":"<")+N(fmt(S.t,3)))),
-      (S.p<0.0001?O("<")+N("0.0001"):N(fmt(S.p,4))),S.rej?"bad":"good");
-    calcNote.innerHTML="Step 2 is the whole statistic: <b>t counts standard errors</b>. A t of "+
-      fmt(S.t,2)+" says the sample mean sits "+fmt(Math.abs(S.t),2)+" standard errors "+
-      (S.t>=0?"above":"below")+" "+fmt(mu0,1)+". Step 3 turns that distance into a probability — "+
-      "it is the gold area on the chart above, read as a number.";
-
-    calcB.textContent="";
-    crow(calcB,"1","The best single guess for the population mean",
-      XB, null, N(fmt(S.xb,2)),"samp");
-    crow(calcB,"2","Go out the critical number of standard errors",
-      TSTAR+O("⋅")+SE, N(fmt(tCrit(1-alpha/2,S.df),3))+O("⋅")+N(fmt(S.se,3)),
-      N(fmt(moe,2)),"bad");
-    crow(calcB,"3","That interval is your estimate of the population mean",
-      I("μ")+O("=")+XB+O("±")+TSTAR+O("⋅")+FR(I("s"),RT(I("n"))),
-      N(fmt(S.xb,2))+O("±")+N(fmt(moe,2)),
-      O("[")+N(fmt(S.lo,2))+O(",")+N(fmt(S.hi,2))+O("]"),inside?"good":"bad");
-    calcNote2.innerHTML="Same three ingredients, run the other way. The test asks <b>is "+
-      fmt(mu0,1)+" believable?</b> and answers yes or no; the interval asks <b>which values are "+
-      "believable?</b> and hands back a range. Right now "+fmt(mu0,1)+" is <b>"+
-      (inside?"inside":"outside")+"</b> that range, which is exactly why the test "+
-      (inside?"did not reject":"rejected")+" it. Drag μ₀ to the edge of the interval and "+
-      "p lands on "+fmt(alpha,2)+".";
-
-    cv1.render(); cv3.render();
-  }
-  go();
- }
-});
-</script>
-
-<script>
-/* ============================================================ 2. the two errors */
-MODULES.push({
- name:"Type I & II errors",
- title:"Two ways to be wrong",
- lede:"Reject when nothing is going on and you have made a <b>Type I error</b>; its rate is the "+
-      "significance level \u03b1, which you choose. Fail to reject when something really is going on "+
-      "and you have made a <b>Type II error</b>, at rate \u03b2, which follows from the effect size "+
-      "and the sample size.",
- build(host){
-  let d=0.4, n=40, alpha=0.05;
-  const lam=()=>d*Math.sqrt(n);
-  const beta=()=>{const zc=zCrit(1-alpha/2),l=lam();
-    return normCdf(zc-l)-normCdf(-zc-l);};
-
-  const lab=el("div","lab");
-  sect(lab,1,"Where the two errors live");
-  const fig=el("div","figwrap"); lab.append(fig);
-  const cv=makeCanvas(fig,0.46,(c,W,H)=>{
-    const l=lam(), zc=zCrit(1-alpha/2);
-    const lo=Math.min(-4.2,l-4.2), hi=Math.max(4.2,l+4.2);
-    const fr=frame(c,W,H,[46,16,38,16],[lo,hi],[0,normPdf(0)*1.34]);
-    fr.grid(6,0,x=>x.toFixed(0),null);
-    fr.axisLabel("the test statistic");
-    const n0=curvePts(x=>normPdf(x),lo,hi,320), n1=curvePts(x=>normPdf(x-l),lo,hi,320);
-    fr.clipIn(()=>{
-      fr.area(n1.filter(q=>q[0]>=-zc&&q[0]<=zc),tint("--warn",0.38));
-      fr.area(n0.filter(q=>q[0]>=zc),tint("--bad",0.48));
-      fr.area(n0.filter(q=>q[0]<=-zc),tint("--bad",0.48));
-      fr.line(n0,css("--curve"),2.8);
-      fr.line(n1,css("--sim"),2.8,[7,5]);
-      [-zc,zc].forEach(z=>fr.vline(z,css("--text-2"),1.5,[4,4]));
-    });
-    /* label the curves and both error regions on the plot itself */
-    c.font='700 12px "Commissioner",sans-serif'; c.textAlign="center"; c.textBaseline="top";
-    c.fillStyle=css("--curve"); c.fillText("H\u2080 true \u00b7 no real difference",fr.X(0),fr.T-34);
-    c.fillStyle=css("--sim");   c.fillText("H\u2081 true \u00b7 a difference this big",fr.X(l),fr.T-34);
-    /* each error labelled over its own region, with a leader into the shading */
-    function chip(px,py,text,colour,toX,toY){
-      c.font='700 11.5px "Commissioner",sans-serif';
-      const wd=c.measureText(text).width;
-      px=clamp(px,fr.L+wd/2+6,fr.R-wd/2-6);
-      if(toX!=null){ c.strokeStyle=colour; c.lineWidth=1.3; c.setLineDash([3,3]);
-        c.beginPath(); c.moveTo(px,py+9); c.lineTo(toX,toY); c.stroke(); c.setLineDash([]); }
-      c.fillStyle=css("--card"); c.globalAlpha=.9;
-      c.fillRect(px-wd/2-7,py-5,wd+14,19); c.globalAlpha=1;
-      c.fillStyle=colour; c.textAlign="center"; c.textBaseline="top"; c.fillText(text,px,py);
-    }
-    chip(fr.X(zc)+(fr.R-fr.X(zc))/2, fr.B-96,
-         "Type I  \u03b1 = "+alpha.toFixed(2), css("--bad"),
-         fr.X(zc)+Math.min(26,(fr.R-fr.X(zc))/2), fr.B-8);
-    chip(fr.X(Math.max(-zc,Math.min(zc,l)-1.35)), fr.B-150,
-         "Type II  \u03b2 = "+beta().toFixed(2), css("--warn"),
-         fr.X(Math.max(-zc,Math.min(zc,l)-0.6)), fr.B-26);
+  sect(lab4,4,"How much it explains, and how far off it lands");
+  const figV=el("div","figwrap"); lab4.append(figV);
+  const cvV=makeCanvas(figV,0.20,(c,W,H)=>{
+    const F=fit();
+    const fr=frame(c,W,H,[16,16,34,16],[0,1],[0,1]);
+    const L=fr.L,R=fr.R,T=fr.T,B=fr.B, h=B-T;
+    const frac=F.ssr/F.sst, split=L+(R-L)*frac;
+    c.fillStyle=tint("--sim",0.55); c.fillRect(L,T,split-L,h);
+    c.fillStyle=tint("--warn",0.42); c.fillRect(split,T,R-split,h);
+    c.strokeStyle=css("--sep"); c.lineWidth=1; c.strokeRect(L,T,R-L,h);
+    c.font='700 12px "Commissioner",sans-serif'; c.textBaseline="middle";
+    c.textAlign="center";
+    if(split-L>70){ c.fillStyle=css("--sim");
+      c.fillText("explained  "+(frac*100).toFixed(1)+"%",(L+split)/2,T+h/2); }
+    if(R-split>70){ c.fillStyle=css("--warn");
+      c.fillText("left over  "+((1-frac)*100).toFixed(1)+"%",(split+R)/2,T+h/2); }
     c.fillStyle=css("--text-2"); c.font='600 11px "Commissioner",sans-serif';
-    c.textAlign="center"; c.textBaseline="top";
-    c.fillText("reject outside \u00b1"+fmt(zc,2),fr.X(0),fr.T+4);
+    c.textAlign="left";  c.textBaseline="top";
+    c.fillText("SSR = "+fmt(F.ssr,1),L,B+8);
+    c.textAlign="right"; c.fillText("SSE = "+fmt(F.sse,1),R,B+8);
+    c.textAlign="center"; c.fillText("total variation in y · SST = "+fmt(F.sst,1),(L+R)/2,B+8);
   });
-  legend(lab,[[tint("--bad",0.85),"Type I error \u00b7 rejecting a true H\u2080","box"],
-    [tint("--warn",0.85),"Type II error \u00b7 missing a real difference","box"],
-    [css("--curve"),"H\u2080 curve"],[css("--sim"),"H\u2081 curve"]]);
-  const ro=readouts(lab,[["a","Type I error rate \u03b1","bad"],["b","Type II error rate \u03b2","warn"],
-    ["n","sample size","sm"],["e","effect size","sm"],["crit","reject beyond","sm"]]);
-  const ctr=el("div","ctrls"); lab.append(ctr);
-  slider(ctr,{label:"Effect size \u00b7 how big the real difference is",min:0.1,max:1.2,step:0.05,
-    value:0.4,fmt:v=>v.toFixed(2)+" sd",on:v=>{d=v;go();}});
-  slider(ctr,{label:"Sample size n",min:5,max:200,step:5,value:40,on:v=>{n=v;go();}});
-  slider(ctr,{label:"Significance level \u03b1",min:0.01,max:0.20,step:0.01,value:0.05,
-    fmt:v=>v.toFixed(2),on:v=>{alpha=v;go();}});
-  host.append(lab);
-
-  /* ---- the 2 x 2 table of what can happen ---- */
-  const lab2=el("div","lab");
-  sect(lab2,2,"The four outcomes");
-  const T=el("div","tblwrap"); lab2.append(T);
-  host.append(lab2);
-
-  function grid(){
-    T.textContent="";
-    const tb=el("table","tbl"), th=el("thead"), hr=el("tr");
-    ["","H\u2080 is true","H\u2081 is true"].forEach(h=>hr.append(el("th",null,h)));
-    th.append(hr); tb.append(th);
-    const bd=el("tbody"), b=beta();
-    const rows=[
-     ["You reject H\u2080",
-      ["<b>Type I error</b><br>rate \u03b1 = "+alpha.toFixed(2),"bad"],
-      ["Correct \u00b7 you found it<br>rate 1 \u2212 \u03b2 = "+(1-b).toFixed(2),"good"]],
-     ["You do not reject",
-      ["Correct<br>rate 1 \u2212 \u03b1 = "+(1-alpha).toFixed(2),"good"],
-      ["<b>Type II error</b><br>rate \u03b2 = "+b.toFixed(2),"warn"]]];
-    rows.forEach(r=>{
-      const tr=el("tr");
-      tr.append(el("td",null,"<b>"+r[0]+"</b>"));
-      [r[1],r[2]].forEach(([html,tone])=>{
-        const td=el("td",null,html);
-        td.style.background="color-mix(in srgb,var(--"+tone+") 12%,transparent)";
-        td.style.color="var(--"+tone+")";
-        tr.append(td);
-      });
-      bd.append(tr);
+  const ro4=readouts(lab4,[["r2","R²","samp"],["r","r · correlation","sm"],
+    ["see","standard error of the estimate","sm"],["mae","mean absolute error","sm"],
+    ["sd","sd of y, for comparison","sm"]]);
+  const errNote=el("p","labnote"); lab4.append(errNote);
+  const figR=el("div","figwrap"); lab4.append(figR);
+  const cvR=makeCanvas(figR,0.30,(c,W,H)=>{
+    const F=fit(), x=F.x;
+    const res=x.map((v,i)=>Y[i]-(F.b0+F.b1*v));
+    const xlo=Math.min(...x), xhi=Math.max(...x);
+    const m=Math.max(...res.map(Math.abs))*1.15;
+    const px=(xhi-xlo)*0.06;
+    const fr=frame(c,W,H,[16,18,40,46],[xlo-px,xhi+px],[-m,m]);
+    fr.grid(6,4,v=>v.toFixed(XS[xi].dp===0?0:1),v=>v.toFixed(0));
+    fr.axisLabel(XS[xi].axis);
+    fr.clipIn(()=>{
+      c.beginPath(); c.moveTo(fr.L,fr.Y(0)); c.lineTo(fr.R,fr.Y(0));
+      c.strokeStyle=css("--sim"); c.lineWidth=2; c.stroke();
+      for(let i=0;i<x.length;i++){
+        c.beginPath(); c.arc(fr.X(x[i]),fr.Y(res[i]),3,0,7);
+        c.fillStyle=tint("--warn",0.5); c.fill();
+        c.strokeStyle=css("--warn"); c.lineWidth=.8; c.stroke();
+      }
     });
-    tb.append(bd); T.append(tb);
+    c.save(); c.translate(13,(fr.T+fr.B)/2); c.rotate(-Math.PI/2);
+    c.fillStyle=css("--text-2"); c.font='600 11.5px "Commissioner",sans-serif';
+    c.textAlign="center"; c.textBaseline="middle";
+    c.fillText("residual, % points",0,0); c.restore();
+  });
+  const resNote=el("p","labnote"); lab4.append(resNote);
+  host.append(lab4);
+
+  /* ---------------- 5. interpretation ---------------- */
+  const lab5=el("div","lab");
+  sect(lab5,5,"Say it in a sentence");
+  const qb=el("div","qbody"); lab5.append(qb);
+  host.append(lab5);
+  let answered=-1;
+
+  const QS=()=>{
+   const F=fit(), s=XS[xi];
+   if(xi===0) return {
+     stem:"R² came out 0.46. Which sentence is right?",
+     opts:[["Nurse staffing accounts for about 46% of the variation in readmission rates across these hospitals.",1],
+           ["46% of readmissions are caused by low nurse staffing.",0],
+           ["The model predicts readmission rate correctly 46% of the time.",0]],
+     why:["R² is a share of <i>variance in y</i>, and it is about variation across hospitals, "+
+          "not about any one hospital. It also says nothing about cause.",
+          "R² is not a share of the outcome and it is not causal. Hospitals that staff more "+
+          "richly differ in other ways too — look at the teaching column in the file.",
+          "That would be accuracy for a yes/no prediction. Regression predicts a number, and how "+
+          "far off it typically lands is the standard error of the estimate, 1.51 points — "+
+          "not R²."]};
+   if(xi===1) return {
+     stem:"Case mix gives b₁ = 0.10 with p_val = 0.918. What do you report?",
+     opts:[["There is no evidence of a linear relationship between case mix and readmission rate.",1],
+           ["Case mix has no effect on readmissions.",0],
+           ["The relationship is positive but small.",0]],
+     why:["p_val = 0.918 and the 95% interval runs from −1.85 to 2.05, straddling zero. The "+
+          "data cannot tell you the sign, let alone the size.",
+          "Failing to find an effect is not finding no effect. A different sample, or a non-linear "+
+          "relationship, could still show one.",
+          "With an interval that wide you cannot claim a direction at all. 0.10 is indistinguishable "+
+          "from noise here."]};
+   return {
+     stem:"Beds gives b₁ = −0.0005 with p_val = 0.766. The slope looks tiny. Why is that "+
+          "not the point?",
+     opts:[["Because the slope is per single bed, so its size depends on the units — and the p-value says it is not distinguishable from zero anyway.",1],
+           ["Because a slope that small is always meaningless.",0],
+           ["Because R² is what decides whether a predictor matters.",0]],
+     why:["Per 100 beds that slope is −0.05 points — the same relationship, a different "+
+          "number. <b>Never read a slope without its units.</b> Here the p-value settles it "+
+          "regardless.",
+          "Size depends on units. A slope of 0.0005 per dollar is 500 per thousand dollars. Judge "+
+          "it against the scale of x and the standard error, never against zero by eye.",
+          "R² and the slope's p-value answer different questions. A predictor can be "+
+          "statistically clear and still explain little, and the reverse happens too."]};
+  };
+
+  function quiz(){
+    const q=QS(); qb.textContent="";
+    qb.append(el("p","qstem",q.stem));
+    q.opts.forEach(([text,ok],i)=>{
+      const b=el("button","qopt b");
+      b.append(el("span","ltr","ABC"[i])); b.append(el("span",null,text));
+      if(answered>=0){ if(ok)b.classList.add("right");
+        else if(i===answered)b.classList.add("wrong"); b.disabled=true; }
+      else b.addEventListener("click",()=>{answered=i;quiz();});
+      qb.append(b);
+    });
+    if(answered>=0){
+      const ok=!!q.opts[answered][1], w=el("div","why");
+      w.append(el("span","pill "+(ok?"ok":"no"),ok?"CORRECT":"NOT QUITE"));
+      w.append(el("p",null,q.why[answered])); qb.append(w);
+    }
   }
 
   function go(){
-    cv.render(); grid();
-    const b=beta();
-    ro.a.textContent=(alpha*100).toFixed(0)+"%";
-    ro.b.textContent=(b*100).toFixed(0)+"%";
-    ro.n.textContent=n;
-    ro.e.textContent=d.toFixed(2)+" sd";
-    ro.crit.textContent="\u00b1"+fmt(zCrit(1-alpha/2),2);
-    ro.b.className="v "+(b>0.5?"bad":b>0.2?"warn":"good");
+    const F=fit(), s=XS[xi];
+    cv.render(); cvV.render(); cvR.render(); quiz();
+
+    const B0=b0u==null?F.b0:b0u, B1=b1u==null?F.b1:b1u;
+    eqn.textContent="";
+    eqn.append(el("span","k","the fitted line"));
+    eqn.append(el("span","f","readmit_rate_pct = "+fmt(F.b0,3)+
+      (F.b1<0?" − ":" + ")+fmt(Math.abs(F.b1),s.dp===0?5:3)+" × "+s.k));
+    if(b0u!=null){
+      const mine=sseOf(B0,B1), best=F.sse;
+      sseNote.innerHTML="Your line leaves <b>SSE = "+fmt(mine,1)+"</b>. The least-squares line "+
+        "leaves <b>"+fmt(best,1)+"</b>"+(mine>best+0.05
+        ? " — "+fmt(mine-best,1)+" worse. Every other line you can draw is worse than that one; "+
+          "that is the whole definition of least squares."
+        : ". You have found it.")+" Snap back when you are done.";
+    }else{
+      sseNote.innerHTML="Those vertical orange segments are the residuals. The least-squares line is "+
+        "the one line that makes the <b>sum of their squares</b> as small as it can be — drag "+
+        "the sliders and watch SSE get worse whichever way you go.";
+    }
+
+    const per=s.dp===0?fmt(Math.abs(F.b1)*100,3):fmt(Math.abs(F.b1),3);
+    const perTxt=s.dp===0?"100 more beds":("1 more "+s.unit);
+    cardB1.innerHTML="<h4>The slope b₁ = "+fmt(F.b1,s.dp===0?5:3)+"</h4><p>"+
+      "For every <b>"+perTxt+"</b>, the readmission rate the line predicts goes "+
+      (F.b1<0?"<b>down</b>":"<b>up</b>")+" by <b>"+per+" percentage points</b>."+
+      "</p><p class='assume'><b>Association, not cause.</b> Hospitals that differ on "+s.lab+
+      " differ in other ways too, and a regression on observational data cannot separate them.</p>";
+    const x0ok=Math.min(...F.x)<=0&&0<=Math.max(...F.x);
+    cardB0.innerHTML="<h4>The intercept b₀ = "+fmt(F.b0,3)+"</h4><p>"+
+      "The line's prediction when "+s.lab+" is <b>0</b>: a readmission rate of <b>"+
+      fmt(F.b0,2)+"%</b>.</p><p class='assume'>"+(x0ok
+      ? "Zero is inside the range of the data here, so this one is readable."
+      : "<b>But "+s.lab+" is never 0 in this data</b> (it runs "+fmt(Math.min(...F.x),2)+" to "+
+        fmt(Math.max(...F.x),2)+"), so b₀ is where the line happens to cross the axis, "+
+        "not a meaningful hospital. Reading it as one is extrapolation.")+"</p>";
+
+    ro3.b1.textContent=fmt(F.b1,s.dp===0?5:4);
+    ro3.se.textContent=fmt(F.seb1,s.dp===0?5:4);
+    ro3.t.textContent=fmt(F.t,3);
+    ro3.p.textContent=pTxt(F.p);
+    ro3.ci.textContent="["+fmt(F.lo,s.dp===0?4:3)+", "+fmt(F.hi,s.dp===0?4:3)+"]";
+    ro3.p.className="v sm "+(F.p<0.05?"bad":"good");
+    codeBox.innerHTML="<span class='cmt'>from scipy import stats</span>\n\n"+
+      "res = stats.linregress(df['"+s.k+"'], df['readmit_rate_pct'])\n\n"+
+      "<span class='cmt'>res.slope "+fmt(F.b1,s.dp===0?5:4)+
+      "   res.intercept "+fmt(F.b0,3)+"\n"+
+      " res.rvalue "+fmt(F.r,4)+"   res.pvalue "+pTxt(F.p)+
+      "   res.stderr "+fmt(F.seb1,s.dp===0?5:4)+"</span>";
+    slopeNote.innerHTML=F.p<0.05
+      ? "The slope is <b>"+fmt(F.b1,s.dp===0?5:3)+"</b> and its standard error is "+fmt(F.seb1,4)+
+        ", so t_stat = "+fmt(F.t,2)+" — the slope is "+fmt(Math.abs(F.t),1)+
+        " standard errors from zero. p_val is "+pTxt(F.p)+", so you reject β₁ = 0. "+
+        "<b>The interval is the more useful output:</b> the data are consistent with a slope "+
+        "anywhere from "+fmt(F.lo,3)+" to "+fmt(F.hi,3)+"."
+      : "t_stat = "+fmt(F.t,2)+" and p_val = "+pTxt(F.p)+", so you keep β₁ = 0. Look at "+
+        "the interval: ["+fmt(F.lo,3)+", "+fmt(F.hi,3)+"] contains zero, which is the same finding "+
+        "said more usefully — <b>the data cannot even pin down the sign.</b>";
+
+    ro4.r2.textContent=F.r2.toFixed(4);
+    ro4.r.textContent=fmt(F.r,4);
+    ro4.see.textContent=fmt(F.se_e,3)+" pts";
+    ro4.mae.textContent=fmt(F.mae,3)+" pts";
+    ro4.sd.textContent=fmt(sdS(Y),3)+" pts";
+    ro4.r2.className="v samp";
+    errNote.innerHTML="<b>R² = "+F.r2.toFixed(3)+"</b> says the line accounts for "+
+      (F.r2*100).toFixed(1)+"% of the variation in readmission rate. It has no units, so it "+
+      "cannot tell you whether the model is <i>useful</i>. For that read the <b>standard error of "+
+      "the estimate, "+fmt(F.se_e,2)+" percentage points</b> — that is the typical miss, in "+
+      "the units of the outcome. Compare it with the sd of y itself, "+fmt(sdS(Y),2)+
+      " points: a model only earns its keep when the first number is meaningfully below the second."+
+      " Mean absolute error, "+fmt(F.mae,2)+" points, says the same thing without squaring, so big "+
+      "misses count less.";
+    resNote.innerHTML="The residual plot is the assumption check. <b>You want a shapeless band "+
+      "around zero.</b> A curve means a straight line was the wrong shape; a funnel that widens "+
+      "means the spread of the errors is not constant, which makes the p-value and the interval "+
+      "above untrustworthy even when the slope itself is fine.";
   }
   go();
- }
-});
-</script>
-
-<script>
-/* ============================================================ 3. pick your test */
-MODULES.push({
- name:"Pick your test",
- title:"Three questions, one test",
- lede:"Answer in order. Each answer lights the next branch, and the ten tests sit at the ends of "+
-      "the tree. <b>The design and the shape of the data choose the test</b> &mdash; never the p-value "+
-      "you were hoping for.",
- build(host){
-  let q1=null,q2=null,q3=null;
-
-  /* ---- small inline glyphs, drawn in currentColor ---- */
-  const ICO={
-   number:'<svg class="ico" viewBox="0 0 34 26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 22h28"/><path d="M8 22V12M15 22V6M22 22V15M29 22V9"/></svg>',
-   counts:'<svg class="ico" viewBox="0 0 34 26" fill="currentColor"><rect x="3" y="12" width="7" height="10" rx="2"/><rect x="13" y="5" width="7" height="17" rx="2"/><rect x="23" y="15" width="7" height="7" rx="2"/></svg>',
-   one:'<svg class="ico" viewBox="0 0 34 26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 21c6 0 5-15 11-15s5 15 11 15"/><path d="M28 4v18" stroke-dasharray="3 3"/></svg>',
-   two:'<svg class="ico" viewBox="0 0 34 26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M1 21c4 0 3-12 7-12s3 12 7 12"/><path d="M19 21c4 0 3-12 7-12s3 12 7 12"/></svg>',
-   paired:'<svg class="ico" viewBox="0 0 34 26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="7" cy="8" r="3.4"/><circle cx="27" cy="8" r="3.4"/><circle cx="7" cy="19" r="3.4"/><circle cx="27" cy="19" r="3.4"/><path d="M11 8h12M11 19h12" stroke-dasharray="3 3"/></svg>',
-   many:'<svg class="ico" viewBox="0 0 34 26" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"><path d="M1 21c3 0 2-10 5-10s2 10 5 10"/><path d="M12 21c3 0 2-13 5-13s2 13 5 13"/><path d="M23 21c3 0 2-8 5-8s2 8 5 8"/></svg>',
-   shares:'<svg class="ico" viewBox="0 0 34 26" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="7" width="10" height="14" rx="2"/><rect x="21" y="7" width="10" height="14" rx="2" stroke-dasharray="3 3"/><path d="M14 14h6" stroke-linecap="round"/></svg>',
-   table:'<svg class="ico" viewBox="0 0 34 26" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="5" width="26" height="17" rx="2.5"/><path d="M4 11h26M17 5v17"/></svg>',
-   sym:'<svg class="ico" viewBox="0 0 34 26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 21c6 0 5-15 15-15s9 15 15 15"/></svg>',
-   skew:'<svg class="ico" viewBox="0 0 34 26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 21c3 0 3-14 8-14s4 8 8 11 10 3 14 3"/></svg>',
-   known:'<svg class="ico" viewBox="0 0 34 26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 21c6 0 5-13 13-13s7 13 13 13"/><path d="M26 6h6M29 3v6"/></svg>'
-  };
-  const bell='M0 46 C 14 46, 16 6, 30 6 S 46 46, 60 46';
-  const rskew='M0 46 C 6 46, 8 8, 16 8 S 26 36, 36 42 S 50 46, 60 46';
-
-  const TESTS={
-   t1:{name:"One-sample t-test",curveShape:bell,
-       when:"One group of numbers against a fixed target, with the spread estimated from the sample. The everyday choice.",
-       code:"t_stat, p_val = stats.ttest_1samp(df[col], popmean=target)",curve:"t with n − 1 df",
-       ex:"Is average resolution time different from the 10-minute promise?",pair:"Wilcoxon signed-rank"},
-   z1:{name:"One-sample z-test",curveShape:bell,
-       when:"The same question when the sample is large or the population spread is genuinely known.",
-       code:"z_stat, p_val = ztest(df[col], value=target)",curve:"the standard normal",
-       ex:"Is this month's average basket different from last year's $45?",pair:"Wilcoxon signed-rank"},
-   w1:{name:"Wilcoxon signed-rank",curveShape:bell,
-       when:"One group against a target when the data is skewed or the sample is small. Compares ranks, not means.",
-       code:"stat, p_val = wilcoxon(df[col] - target)",curve:"ranks · normal for larger n",
-       ex:"Is the median pickup wait different from 4 minutes?",pair:"one-sample t-test"},
-   t2:{name:"Independent t-test",curveShape:bell,
-       when:"Two separate groups of numbers, reasonably symmetric. Keep equal_var=False.",
-       code:"t_stat, p_val = stats.ttest_ind(g1, g2, equal_var=False)",curve:"t · Welch df",
-       ex:"Do phone tickets take longer than chat tickets?",pair:"Mann-Whitney U"},
-   mw:{name:"Mann-Whitney U",curveShape:bell,
-       when:"Two separate groups when the data is skewed or has an extreme value. Compares ranks.",
-       code:"u_stat, p_val = mannwhitneyu(g1, g2)",curve:"ranks · normal for larger n",
-       ex:"Do North and South differ on a heavily skewed wait time?",pair:"independent t-test"},
-   tp:{name:"Paired t-test",curveShape:bell,
-       when:"The same units measured twice. Pairing removes the differences between units and leaves each one's own change.",
-       code:"t_stat, p_val = stats.ttest_rel(df[before], df[after])",curve:"t with pairs − 1 df",
-       ex:"Did handle time change after the new tool, agent by agent?",pair:"Wilcoxon signed-rank"},
-   wp:{name:"Wilcoxon signed-rank",curveShape:bell,
-       when:"The same units twice, when the changes are skewed or one pair moves wildly.",
-       code:"stat, p_val = wilcoxon(after, before)",curve:"ranks · normal for larger n",
-       ex:"Did delivery time change after the routing app, courier by courier?",pair:"paired t-test"},
-   an:{name:"ANOVA",curveShape:rskew,
-       when:"Three or more group means at once, so you do not run three tests and treble your error rate.",
-       code:"f_stat, p_val = stats.f_oneway(g1, g2, g3)",curve:"F with k−1 and N−k df",
-       ex:"Do email, chat and phone resolve in the same average time?",pair:"pairwise tests, with a correction"},
-   gf:{name:"Chi-square goodness of fit",curveShape:rskew,
-       when:"Counts in categories against shares you expected. Every expected count should be at least 5.",
-       code:"chi2, p_val = stats.chisquare(observed, f_exp=expected)",curve:"χ² with k − 1 df",
-       ex:"Do tickets arrive evenly across the seven weekdays?",pair:null},
-   ind:{name:"Chi-square independence",curveShape:rskew,
-       when:"Two categorical variables, to see whether one depends on the other. Association, not cause.",
-       code:"chi2, p_val, dof, expected = stats.chi2_contingency(pd.crosstab(a, b))",
-       curve:"χ² with (r−1)(c−1) df",
-       ex:"Does first-contact resolution depend on the channel?",pair:null}};
-
-  function result(){
-    if(q1==="counts") return q2==="shares"?"gf":q2==="table"?"ind":null;
-    if(q1!=="number") return null;
-    if(q2==="many") return "an";
-    if(!q2||!q3) return null;
-    if(q2==="one")    return q3==="skew"?"w1":q3==="known"?"z1":"t1";
-    if(q2==="two")    return q3==="skew"?"mw":"t2";
-    if(q2==="paired") return q3==="skew"?"wp":"tp";
-    return null;
-  }
-
-  const lab=el("div","lab");
-  const flow=el("div","flowwrap"); lab.append(flow);
-  const res=el("div"); lab.append(res);
-  host.append(lab);
-
-  function row(num,label,opts,current,on){
-    const w=el("div","flowrow");
-    const q=el("div","flowq"); q.append(el("span","num",String(num)));
-    q.append(el("span",null,label)); w.append(q);
-    const o=el("div","opts");
-    opts.forEach(([v,t,sub,ico])=>{
-      const b=el("button","node",(ICO[ico]||"")+"<span>"+t+(sub?"<small>"+sub+"</small>":"")+"</span>");
-      b.setAttribute("aria-pressed",current===v?"true":"false");
-      b.addEventListener("click",()=>on(v));
-      o.append(b);
-    });
-    w.append(o); flow.append(w);
-  }
-  const arrow=lit=>flow.append(el("div","connector"+(lit?" lit":"")));
-
-  function miniCurve(shape){
-    return '<svg viewBox="0 0 60 52" width="100%" height="58" fill="none" aria-hidden="true">'+
-      '<path d="'+shape+' L60 46 L0 46 Z" fill="rgba(255,255,255,.14)"/>'+
-      '<path d="'+shape+'" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>'+
-      '<path d="M0 46 H60" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/></svg>';
-  }
-
-  function render(){
-    flow.textContent="";
-    row(1,"What did you measure?",[
-      ["number","A number","minutes, dollars, a rating","number"],
-      ["counts","Counts in categories","how many fell in each group","counts"]],
-      q1,v=>{q1=v;q2=null;q3=null;render();});
-    if(q1){
-      arrow(true);
-      if(q1==="number") row(2,"How was the data collected?",[
-        ["one","One group vs a target","is the average different from 10?","one"],
-        ["two","Two separate groups","phone against chat","two"],
-        ["paired","The same units, twice","before and after, agent by agent","paired"],
-        ["many","Three or more groups","email, chat and phone","many"]],
-        q2,v=>{q2=v;q3=null;render();});
-      else row(2,"Compared against what?",[
-        ["shares","Shares you expected","an even week, or a staffing plan","shares"],
-        ["table","Another categorical variable","does resolution depend on channel?","table"]],
-        q2,v=>{q2=v;q3=null;render();});
-    }
-    if(q1==="number"&&q2&&q2!=="many"){
-      arrow(true);
-      const opts=[["sym","Roughly symmetric","no extreme values","sym"],
-                  ["skew","Skewed, or n under 20","one value could drag the mean","skew"]];
-      if(q2==="one") opts.push(["known","Symmetric, σ known","rare in practice","known"]);
-      row(3,"What shape is the data?",opts,q3,v=>{q3=v;render();});
-    }
-    const k=result();
-    res.textContent="";
-    if(!k){
-      res.append(el("div","empty","Answer the questions above and your test appears here."));
-    } else {
-      const t=TESTS[k], card=el("div","result");
-      const left=el("div");
-      left.append(el("div","tag","Your test"));
-      left.append(el("div","rname",t.name));
-      left.append(el("div","rwhen",t.when));
-      left.append(el("div","rcode",t.code));
-      left.append(el("div","rmeta","<span>Reads from <b>"+t.curve+"</b></span>"+
-        (t.pair?"<span>Partner test: <b>"+t.pair+"</b></span>":"")+
-        "<span>e.g. "+t.ex+"</span>"));
-      const right=el("div","curvecard");
-      right.append(el("div","lbl","Reference curve"));
-      right.insertAdjacentHTML("beforeend",miniCurve(t.curveShape));
-      card.append(left,right); res.append(card);
-    }
-  }
-  render();
- }
-});
-</script>
-
-<script>
-/* ============================================================ 4. practice */
-MODULES.push({
- name:"Practice",
- title:"Twelve questions",
- lede:"Pick an answer and the page tells you straight away whether it holds up, and why.",
- build(host){
-  const Q=[
-   {q:"Thirty agents each had their handle time measured before and after a new tool. Which test?",
-    o:["Independent t-test","Paired t-test","ANOVA","Chi-square independence"],a:1,
-    why:"The same thirty people appear twice, so the rows pair up one to one. Pairing removes the differences between agents and leaves each agent's own change."},
-   {q:"A sample of 40 invoices has a mean of $1,430 and a median of $780. You want to test the centre against a target. Which test fits best?",
-    o:["One-sample t-test","Wilcoxon signed-rank","Chi-square goodness of fit","Paired t-test"],a:1,
-    why:"Mean far above median means a long right tail. The signed-rank test asks the same question about the centre without assuming a symmetric curve."},
-   {q:"What does a p-value of 0.03 mean?",
-    o:["There is a 3 percent chance H0 is true",
-       "If H0 were true, data at least this extreme would turn up 3 percent of the time",
-       "The effect is small but real","97 percent of the data supports H1"],a:1,
-    why:"A p-value is computed in a world where H0 holds. It is never the probability that H0 is true."},
-   {q:"You run a test, get p = 0.07, and then change alpha from 0.05 to 0.10. What have you done?",
-    o:["Used a more sensitive test","Corrected for multiple comparisons",
-       "Abandoned the error rate you promised","Increased the sample size"],a:2,
-    why:"Alpha is a promise made before the data about how often you will cry wolf. Moving it after seeing p means the number no longer describes anything."},
-   {q:"A chi-square test of independence on a 3 by 2 table has how many degrees of freedom?",
-    o:["6","5","2","1"],a:2,
-    why:"(rows − 1) × (columns − 1) = 2 × 1 = 2. The row and column totals are fixed, so only two cells are free to vary."},
-   {q:"Your ANOVA gives p = 0.002 across three channels. What can you report?",
-    o:["All three channels differ from each other",
-       "At least one channel differs; pairwise tests are needed to say which",
-       "The largest and smallest differ, nothing more","Nothing — ANOVA cannot be used on three groups"],a:1,
-    why:"F compares the spread between group means with the spread inside the groups, for the whole set at once. Which pairs differ needs follow-up tests with a correction."},
-   {q:"A study with 20 observations fails to reject H0. A colleague says this proves there is no effect. What is wrong?",
-    o:["Nothing, that is what a non-significant result means","The test should have been one-sided",
-       "With n = 20 the study may have had too little power to find a real effect",
-       "They should have used alpha = 0.10"],a:2,
-    why:"Failing to find something is not finding nothing. At a small effect size, n = 20 misses a real difference most of the time."},
-   {q:"In a chi-square goodness of fit test, one expected count comes out as 2.4. What should you do?",
-    o:["Report the p-value as normal","Use the observed count instead",
-       "Combine categories, or use an exact test — the chi-square curve is not a fair reference here",
-       "Drop that category from the table"],a:2,
-    why:"The approximation needs every expected count at or above about 5. Dropping the category changes the question; combining categories does not."},
-   {q:"Resolution times are right-skewed. A t-test and Mann-Whitney disagree. Which do you report?",
-    o:["The t-test, because it uses the actual values",
-       "Mann-Whitney, because the data breaks the t-test's assumption",
-       "Whichever gives the smaller p-value","Neither — collect more data first"],a:1,
-    why:"You choose the test from the design and the shape before seeing either answer. Picking by p-value afterwards is p-hacking."},
-   {q:"Quadrupling the sample size does what to the standard error of the mean?",
-    o:["Halves it","Quarters it","Doubles it","Leaves it unchanged"],a:0,
-    why:"The standard error is σ ÷ √n. Four times the data gives twice the square root, so half the standard error."},
-   {q:"You run 20 independent tests on data where nothing is going on, at alpha = 0.05. How many significant results should you expect?",
-    o:["None","About one","About five","It depends on the sample size"],a:1,
-    why:"Under H0 a p-value is equally likely anywhere between 0 and 1, so one in twenty falls below 0.05 by construction."},
-   {q:"The sampling distribution of the sample mean is the distribution of what?",
-    o:["The values in your sample","The values in the population",
-       "The mean you would get from every possible sample of that size","The errors in your measurements"],a:2,
-    why:"It is a distribution of a statistic, not of data. You only ever see one sample from it, and a test judges that one against the whole pile."}
-  ];
-  let i=0,picked=null,score=0,answered=new Array(Q.length).fill(null);
-
-  const lab=el("div","lab");
-  const head=el("div","qhead");
-  const dots=el("div","dots"); head.append(dots);
-  const tally=el("div"); tally.style.cssText="margin-left:auto;font-size:13px;font-weight:700;color:var(--text-2)";
-  head.append(tally); lab.append(head);
-  const body=el("div","qbody"); lab.append(body);
-  const nav=el("div","btnrow"); nav.style.cssText="padding:14px 18px 18px";
-  lab.append(nav); host.append(lab);
-
-  function render(){
-    dots.textContent="";
-    answered.forEach((a,k)=>{
-      const d=el("i",(k===i?"now ":"")+(a===true?"ok":a===false?"no":""));
-      dots.append(d);
-    });
-    const done=answered.filter(a=>a!==null).length;
-    tally.textContent=score+" / "+done+" correct";
-    body.textContent="";
-    const q=Q[i];
-    body.append(el("p","qstem","<b>"+(i+1)+".</b> "+q.q));
-    q.o.forEach((opt,k)=>{
-      const cls="b qopt"+(picked!=null ? (k===q.a?" right":k===picked?" wrong":"") : "");
-      const b=el("button",cls,'<span class="ltr">'+String.fromCharCode(65+k)+'</span><span>'+opt+'</span>');
-      if(picked!=null) b.disabled=true;
-      else b.addEventListener("click",()=>{
-        picked=k;
-        if(answered[i]===null){answered[i]=(k===q.a); if(k===q.a)score++;}
-        render();
-      });
-      body.append(b);
-    });
-    if(picked!=null){
-      const w=el("div","why");
-      w.append(el("span","pill "+(picked===q.a?"ok":"no"),picked===q.a?"CORRECT":"NOT QUITE"));
-      w.append(el("p",null,q.why));
-      body.append(w);
-    }
-    nav.textContent="";
-    const prev=el("button","b","← Previous"); prev.disabled=(i===0);
-    prev.addEventListener("click",()=>{i--;picked=null;render();});
-    const next=el("button","b"+(picked!=null?" on":""),
-      i===Q.length-1?"Back to the first":"Next question →");
-    next.addEventListener("click",()=>{i=(i+1)%Q.length;picked=null;render();});
-    const again=el("button","b","Start over");
-    again.addEventListener("click",()=>{i=0;picked=null;score=0;
-      answered=new Array(Q.length).fill(null);render();});
-    nav.append(prev,next,again);
-  }
-  render();
  }
 });
 </script>
@@ -1403,5 +987,7 @@ MODULES.push({
 })();
 </script>
 
+
+<script>document.querySelector('.segwrap').style.display='none';</script>
 </body>
 </html>
